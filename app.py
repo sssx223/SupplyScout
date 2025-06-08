@@ -188,116 +188,121 @@ with st.sidebar:
 
 
 ########### OUTPUTS ###########
-st.markdown("### Supply-Chain Analysis & Vendor Ranking")
+st.markdown("### Product Comparison & Vendor Ranking")
 
-# 1) Parse the user’s free-text search_prompt as JSON → query_specs
+# 1) Parse the user’s search_prompt as JSON → query_specs
 try:
     query_specs = json.loads(search_prompt)
     if not isinstance(query_specs, dict) or not all(isinstance(v, dict) for v in query_specs.values()):
         raise ValueError
 except Exception:
     st.error(
-        "❗ Your search prompt must be valid JSON mapping each material to a dict, e.g.:\n"
+        "❗ Please enter your query as JSON mapping each material to its price & match_score, e.g.:\n"
         "`{\"isopropanol\":{\"price\":10,\"match_score\":1.0},"
         "\"acetone\":{\"price\":20,\"match_score\":0.8}}`"
     )
     st.stop()
 
 # 2) Load each material’s JSON file into supply_specs
-#    Expect files named "<material>_product_data.json"
+#    Files must be named "<material>_product_data.json"
 supply_specs = {}
-for mat in query_specs:
+for mat, specs in query_specs.items():
     filename = f"{mat}_product_data.json"
     try:
         data = json.load(open(filename))
     except FileNotFoundError:
-        st.error(f"JSON file for material '{mat}' not found: {filename}")
+        st.error(f"Could not find file: {filename}")
         st.stop()
     for vendor, entries in data.items():
         for info in entries.values():
             price = info.get('price', 0.0)
             score = info.get('match_score', 0.0)
-            supply_specs.setdefault((mat, vendor), {})['price'] = price
-            supply_specs[(mat, vendor)]['match_score'] = score
+            supply_specs[(mat, vendor)] = {'price': price, 'match_score': score}
 
-# 3) BiRank + minimal-cover routine (unchanged)
-def compute_ranking(query_specs, supply_specs):
-    materials = list(query_specs.keys())
-    vendors   = sorted({v for (_, v) in supply_specs.keys()})
-    supply_map = {v:set() for v in vendors}
-    for m,v in supply_specs:
-        supply_map[v].add(m)
-    M, V = len(materials), len(vendors)
-    W = np.zeros((M, V))
-    mi = {m:i for i,m in enumerate(materials)}
-    vi = {v:j for j,v in enumerate(vendors)}
-    for (m,v), specs in supply_specs.items():
-        if m not in query_specs: continue
-        q = query_specs[m]
-        keys = sorted(set(q)|set(specs))
-        qv = np.array([q.get(k,0.0) for k in keys]).reshape(1,-1)
-        vv = np.array([specs.get(k,0.0) for k in keys]).reshape(1,-1)
-        W[mi[m], vi[v]] = cosine_similarity(qv, vv)[0,0]
-    α=0.85
-    f=np.ones(M)/M; h=np.ones(V)/V
-    for _ in range(100):
-        h = α*W.T.dot(f)+(1-α)*(np.ones(V)/V); h/=h.sum()
-        f = α*W.dot(h)+(1-α)*(np.ones(M)/M); f/=f.sum()
-    scores = pd.DataFrame({'vendor':vendors,'score':h})
-    all_mat = set(materials)
-    best_subset, bs, bsc = None, V+1, -np.inf
-    for r in range(1, V+1):
-        for subset in itertools.combinations(vendors, r):
-            if all_mat <= set().union(*(supply_map[v] for v in subset)):
-                tot = scores.set_index('vendor').loc[list(subset),'score'].sum()
-                if r<bs or (r==bs and tot>bsc):
-                    bs,bsc,best_subset = r,tot,subset
-        if best_subset: break
-    return scores, best_subset
+# 3) Compute BiRank and minimal vendor subset
+materials = list(query_specs.keys())
+vendors   = sorted({v for (_, v) in supply_specs.keys()})
 
-vendor_scores, best_subset = compute_ranking(query_specs, supply_specs)
+# build supply_map
+supply_map = {v: set() for v in vendors}
+for m, v in supply_specs:
+    supply_map[v].add(m)
 
-# 4) Display the ranking table with per-material costs
+# build W
+M, V = len(materials), len(vendors)
+mat_index  = {m:i for i,m in enumerate(materials)}
+vend_index = {v:j for j,v in enumerate(vendors)}
+W = np.zeros((M, V))
+for (m, v), specs in supply_specs.items():
+    qdict = query_specs[m]
+    keys  = sorted(set(qdict) | set(specs))
+    qvec  = np.array([qdict.get(k,0.0) for k in keys]).reshape(1,-1)
+    vvec  = np.array([specs.get(k,0.0) for k in keys]).reshape(1,-1)
+    W[mat_index[m], vend_index[v]] = cosine_similarity(qvec, vvec)[0,0]
+
+# run BiRank
+alpha = 0.85
+f = np.ones(M)/M
+h = np.ones(V)/V
+for _ in range(100):
+    h = alpha * W.T.dot(f) + (1-alpha)*(np.ones(V)/V); h /= h.sum()
+    f = alpha * W.dot(h)   + (1-alpha)*(np.ones(M)/M); f /= f.sum()
+
+# find minimal covering subset
+all_mat = set(materials)
+best_size, best_score, best_subset = V+1, -np.inf, None
+for r in range(1, V+1):
+    for subset in itertools.combinations(vendors, r):
+        covered = set().union(*(supply_map[v] for v in subset))
+        if covered == all_mat:
+            total = sum(h[vend_index[v]] for v in subset)
+            if r < best_size or (r == best_size and total > best_score):
+                best_size, best_score, best_subset = r, total, subset
+    if best_subset: break
+
+# 4) Display Vendor Scores with cost columns
 st.subheader("🔢 Vendor BiRank Scores")
-for mat in query_specs:
+vendor_scores = pd.DataFrame({'vendor': vendors, 'score': h})
+for mat in materials:
     vendor_scores[f"{mat}_cost"] = vendor_scores['vendor'].apply(
-        lambda v: supply_specs.get((mat,v),{}).get('price','n/a')
+        lambda v: supply_specs.get((mat, v), {}).get('price', 'n/a')
     )
 st.dataframe(vendor_scores.sort_values('score', ascending=False).reset_index(drop=True))
 
-# 5) Draw the bipartite network with optimal subset highlighted
+# 5) Plot the bipartite network
 st.subheader("🌐 Materials–Vendors Network")
 G = nx.Graph()
-G.add_nodes_from(query_specs.keys(), bipartite=0)
-G.add_nodes_from(vendor_scores['vendor'],    bipartite=1)
-for (m,v) in supply_specs:
+G.add_nodes_from(materials, bipartite=0)
+G.add_nodes_from(vendors,   bipartite=1)
+for (m, v) in supply_specs:
     G.add_edge(m, v)
-pos = nx.bipartite_layout(G, list(query_specs.keys()))
+pos = nx.bipartite_layout(G, materials)
 
 fig, ax = plt.subplots(figsize=(8,4))
+# draw edges
 all_e = list(G.edges())
 opt_e = [(m,v) for (m,v) in all_e if v in best_subset]
 other_e = [e for e in all_e if e not in opt_e]
-
 nx.draw_networkx_edges(G, pos, edgelist=other_e, edge_color='lightgray', width=1, ax=ax)
 nx.draw_networkx_edges(G, pos, edgelist=opt_e,     edge_color='red',       width=2, ax=ax)
-nx.draw_networkx_nodes(G, pos, nodelist=query_specs.keys(),
+# draw nodes
+nx.draw_networkx_nodes(G, pos, nodelist=materials,
                        node_color='#4C72B0', node_shape='o', node_size=800, ax=ax)
-base_vs = [v for v in vendor_scores['vendor'] if v not in best_subset]
+base_vs = [v for v in vendors if v not in best_subset]
 nx.draw_networkx_nodes(G, pos, nodelist=base_vs,
                        node_color='#55A868', node_shape='s', node_size=600, ax=ax)
 nx.draw_networkx_nodes(G, pos, nodelist=best_subset,
                        node_color='#C44E52', node_shape='s', node_size=1000,
                        edgecolors='black', linewidths=2, ax=ax)
 nx.draw_networkx_labels(G, pos, font_size=9, ax=ax)
-
-patches = [
+# legend
+handles = [
     mpatches.Patch(color='#4C72B0', label='Materials'),
     mpatches.Patch(color='#55A868', label='Vendors'),
     mpatches.Patch(color='#C44E52', label='Optimal Vendors'),
-    mpatches.Patch(color='red',       label='Chosen Edges'),
+    mpatches.Patch(color='red',       label='Selected Edges'),
 ]
-ax.legend(handles=patches, bbox_to_anchor=(1.05,1), loc='upper left')
+ax.legend(handles=handles, bbox_to_anchor=(1.05,1), loc='upper left')
 ax.axis('off')
 st.pyplot(fig)
 
