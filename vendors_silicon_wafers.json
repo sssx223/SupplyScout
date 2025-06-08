@@ -1,0 +1,89 @@
+{
+  "total_vendors": 21,
+  "vendors": [
+    {
+      "vendor_name": "inseto",
+      "product_page_url": "https://www.inseto.com/product-category/semiconductor-wafers/si_wafer/"
+    },
+    {
+      "vendor_name": "addison semiconductor materials",
+      "product_page_url": "https://www.addisonengineering.com/silicon-wafers.html"
+    },
+    {
+      "vendor_name": "silson",
+      "product_page_url": "https://silson.com/product/diced-wafers/"
+    },
+    {
+      "vendor_name": "waferpro",
+      "product_page_url": "https://waferpro.com/product-category/wafer-type/silicon-wafer/"
+    },
+    {
+      "vendor_name": "siegert wafer gmbh",
+      "product_page_url": "https://www.siegertwafer.com/Silicon_Wafers.html"
+    },
+    {
+      "vendor_name": "roguey",
+      "product_page_url": "https://roguey.co.uk/x4/wares/siliconwafers/"
+    },
+    {
+      "vendor_name": "mse supplies llc",
+      "product_page_url": "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm"
+    },
+    {
+      "vendor_name": "xiamen powerway advanced material co., ltd.",
+      "product_page_url": "https://www.powerwaywafer.com/de/silicon-wafer/300-mm-silicon-wafers-300mm-tox-si-thermal-oxidation-wafer.html"
+    },
+    {
+      "vendor_name": "agar scientific",
+      "product_page_url": "https://www.agarscientific.com/silicon-wafers"
+    },
+    {
+      "vendor_name": "d&x",
+      "product_page_url": "https://dong-xu.co.jp/en/stocklist/silicon-wafer-stock-4/"
+    },
+    {
+      "vendor_name": "wafer universe",
+      "product_page_url": "https://waferuniverse.com/silicon-wafers/"
+    },
+    {
+      "vendor_name": "universitywafer, inc.",
+      "product_page_url": "https://www.universitywafer.com/silicon-wafer-undoped.html"
+    },
+    {
+      "vendor_name": "techcet",
+      "product_page_url": "https://techcet.com/product/silicon-wafers/"
+    },
+    {
+      "vendor_name": "icemos technology",
+      "product_page_url": "https://www.icemostech.com/thin-soi-wafers.html"
+    },
+    {
+      "vendor_name": "active business company gmbh (abc gmbh)",
+      "product_page_url": "https://activebizz.com/en/wafer/silicon-wafer/"
+    },
+    {
+      "vendor_name": "shin-etsu chemical co., ltd.",
+      "product_page_url": "https://www.shinetsu.co.jp/en/products/electronics-materials/silicon-wafers/"
+    },
+    {
+      "vendor_name": "nexwafe",
+      "product_page_url": "http://www.nexwafe.com/"
+    },
+    {
+      "vendor_name": "shilpa enterprises",
+      "product_page_url": "https://shilpent.com/products/105-silicon-wafers.html"
+    },
+    {
+      "vendor_name": "university wafer",
+      "product_page_url": "https://order.universitywafer.com/"
+    },
+    {
+      "vendor_name": "okmetic",
+      "product_page_url": "https://www.okmetic.com/silicon-wafers/"
+    },
+    {
+      "vendor_name": "si-mat",
+      "product_page_url": "https://www.si-mat.com/en/silicon-wafers/"
+    }
+  ]
+}
