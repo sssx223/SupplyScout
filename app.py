@@ -7,6 +7,8 @@ import os # NEW: Import os for API key
 import json
 import re # NEW: Import re
 from dotenv import load_dotenv # NEW: Import load_dotenv
+import base64
+
 
 load_dotenv()
 # --- PAGE CONFIGURATION ---
@@ -17,153 +19,63 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- ENHANCED STYLING WITH PROPER LOGO POSITIONING ---
-st.markdown("""
-    <style>
-        /* Hide Streamlit default header and branding */
-        header[data-testid="stHeader"] {
-            display: none;
-        }
-        
-        /* Hide hamburger menu */
-        .css-1rs6os.edgvbvh3 {
-            display: none;
-        }
-        
-        /* Custom fixed header with logo */
-        .header-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: linear-gradient(90deg, #16202e 0%, #1a2332 100%);
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            z-index: 1000;
-            border-bottom: 1px solid #22304a;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .logo-text {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #a3c9f9;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        /* Dark theme for entire app */
-        .stApp {
-            background-color: #131a26;
-            color: #e0e6ed;
-        }
-        
-        /* Main content padding to account for fixed header */
-        .main .block-container {
-            padding-top: 80px;
-            max-width: 100%;
-        }
-        
-        /* Sidebar styling */
-        .stSidebar {
-            background-color: #16202e !important;
-            border-right: 1px solid #22304a;
-        }
-        
-        .stSidebar .stMarkdown {
-            color: #e0e6ed;
-        }
-        
-        /* Button styling with hover effects */
-        .stButton>button {
-            background-color: #22304a;
-            color: #e0e6ed;
-            border-radius: 6px;
-            border: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .stButton>button:hover {
-            background-color: #2a3a5a;
-            transform: translateY(-1px);
-            box_shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        /* Input field styling */
-        .stTextInput>div>div>input {
-            background-color: #22304a;
-            color: #e0e6ed;
-            border: 1px solid #2a3a5a;
-            border-radius: 4px;
-        }
-        
-        .stSelectbox>div>div>select {
-            background-color: #22304a;
-            color: #e0e6ed;
-            border: 1px solid #2a3a5a;
-        }
-        
-        .stNumberInput>div>div>input {
-            background-color: #22304a;
-            color: #e0e6ed;
-            border: 1px solid #2a3a5a;
-        }
-        
-        /* DataFrame styling */
-        .stDataFrame {
-            background-color: #1a2332;
-        }
-        
-        /* Metric cards styling */
-        .metric-card {
-            background-color: #1a2332;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #22304a;
-            margin: 10px 0;
-        }
-        
-        /* Tab styling */
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 8px;
-        }
-        
-        .stTabs [data-baseweb="tab"] {
-            background-color: #22304a;
-            color: #e0e6ed;
-            border-radius: 4px;
-        }
-        
-        /* Info box styling */
-        .stAlert {
-            background-color: #1a2332;
-            border: 1px solid #22304a;
-            color: #e0e6ed;
-        }
-        
-        /* Expander styling */
-        .streamlit-expanderHeader {
-            background-color: #22304a;
-            color: #e0e6ed;
-        }
-        
-        /* Container styling */
-        .element-container {
-            background-color: transparent;
-        }
-    </style>
-    <div class="header-container">
-        <div class="logo-text">
-            🔍 SupplyScout
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+import base64
 
+# --- LOGO ---
+def get_image_as_base64(file):
+    """ Reads a file and returns its content as a base64 encoded string. """
+    try:
+        with open(file, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    except FileNotFoundError:
+        return None
+
+# The path to your logo file
+logo_path = "SupplyScout Logo.png" 
+# Convert the logo to a base64 string
+logo_base64 = get_image_as_base64(logo_path)
+
+# Add the logo to the page with custom CSS for positioning only if logo exists
+if logo_base64:
+    st.markdown(
+        f"""
+        <style>
+            .logo-container {{
+                position: fixed;
+                top: -10px;
+                right: 10px;
+                z-index: 9999;
+                width: 200px;
+                height: auto;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 0 !important;
+                font-size: 0 !important;
+                overflow: hidden;
+            }}
+            .logo-img {{
+                width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 0 !important;
+                border: none;
+                outline: none;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            }}
+            /* Hide Streamlit's default header */
+            header[data-testid="stHeader"] {{
+                display: none;
+            }}
+        </style>
+        <div class="logo-container">
+            <img class="logo-img" src="data:image/png;base64,{logo_base64}">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # --- FUNCTION TO EXTRACT PRODUCT SPECIFICATIONS (MOVED FROM MODAL) ---
 def get_dictionary_from_prompt(user_prompt: str) -> dict:
