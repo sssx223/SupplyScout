@@ -7,9 +7,13 @@ import os # NEW: Import os for API key
 import json
 import re # NEW: Import re
 from dotenv import load_dotenv # NEW: Import load_dotenv
-import base64
 
-
+import subprocess
+import networkx as nx
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import cosine_similarity # For cosine_similarity
+import itertools # For itertools.combinations
 load_dotenv()
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -172,14 +176,165 @@ with st.sidebar:
         if search_prompt.strip():
             with st.spinner("Searching for products..."):
                 response_data = get_dictionary_from_prompt(search_prompt)
-            
+                
+
+
             if response_data:
-                st.success("Search completed successfully!")
+                #st.success("Search completed successfully!")
                 st.session_state['search_results'] = response_data
                 st.session_state['last_search'] = search_prompt
                 
-                st.markdown("#### Extracted Product Specifications:")
-                st.json(response_data) # Display the extracted dictionary
+                for key in response_data.keys():
+                    #subprocess.run(["python","-m","modal","run","vendor_search_modal.py","--product",key])
+                    pass
+                for key in response_data.keys():
+                    #
+
+                    output_string = f"{key}"
+
+                    # Iterate through the items (key-value pairs) in response_data
+                    for attr_key, attr_value in response_data[key].items():
+                        output_string += f" {attr_value}"
+                    print(output_string)
+                    #subprocess.run(["python","-m","modal","run","webscrapper.py","--json-file-path",f"vendors_{key.replace(" ", "_")}.json","--output-file-name", f"{key.replace(" ", "_")}_product_data.json", "--material-context", output_string])
+                
+                # This is the list you would have generated in the previous step
+                response_data__ = [key.replace(" ", "_") for key in response_data.keys()]
+                # Expected: ['Product_A_Name', 'Item_B_with_spaces', 'Another_Key']
+
+                # Corrected line for query_specs using zip
+                query_specs1 = {
+                    original_key: f"{modified_key}_product_data.json"
+                    for original_key, modified_key in zip(response_data.keys(), response_data__)
+                }
+
+                # Corrected line for query_specs using zip
+                query_specs = {
+                    key: {'price': 10, 'match_score':1.0} for key in query_specs1.keys()
+                }
+
+                print(query_specs)
+
+
+                # 2) Load each material’s JSON file into supply_specs
+                #    Files must be named "<material>_product_data.json"
+                supply_specs = {}
+                for mat, filename in query_specs1.items():
+                    try:
+                        data = json.load(open(filename))
+                    except FileNotFoundError:
+                        st.error(f"Could not find file: {filename}")
+                        st.stop()
+                    for vendor, entries in data.items():
+                        for info in entries.values():
+                            price = info.get('price', 0.0)
+                            score = info.get('match_score', 0.0)
+                            supply_specs[(mat, vendor)] = {'price': price, 'match_score': score}
+
+                # 3) Compute BiRank and minimal vendor subset
+                materials = list(query_specs.keys())
+                vendors   = sorted({v for (_, v) in supply_specs.keys()})
+
+                # build supply_map
+                supply_map = {v: set() for v in vendors}
+                for m, v in supply_specs:
+                    supply_map[v].add(m)
+
+                # build W
+                M, V = len(materials), len(vendors)
+                mat_index  = {m:i for i,m in enumerate(materials)}
+                vend_index = {v:j for j,v in enumerate(vendors)}
+                W = np.zeros((M, V))
+                for (m, v), specs in supply_specs.items():
+                    qdict = query_specs[m]
+                    
+                    keys  = sorted(set(qdict) | set(specs))
+                    qvec  = np.array([qdict.get(k,0.0) for k in keys]).reshape(1,-1)
+                    vvec  = np.array([specs.get(k,0.0) for k in keys]).reshape(1,-1)
+                    W[mat_index[m], vend_index[v]] = cosine_similarity(qvec, vvec)[0,0]
+
+                # run BiRank
+                alpha = 0.85
+                f = np.ones(M)/M
+                h = np.ones(V)/V
+                for _ in range(100):
+                    h = alpha * W.T.dot(f) + (1-alpha)*(np.ones(V)/V); h /= h.sum()
+                    f = alpha * W.dot(h)   + (1-alpha)*(np.ones(M)/M); f /= f.sum()
+
+                # find minimal covering subset
+                all_mat = set(materials)
+                best_size, best_score, best_subset = V+1, -np.inf, None
+                for r in range(1, V+1):
+                    for subset in itertools.combinations(vendors, r):
+                        covered = set().union(*(supply_map[v] for v in subset))
+                        if covered == all_mat:
+                            total = sum(h[vend_index[v]] for v in subset)
+                            if r < best_size or (r == best_size and total > best_score):
+                                best_size, best_score, best_subset = r, total, subset
+                    if best_subset: break
+
+                # 4) Display Vendor Scores with cost columns
+                st.subheader("🔢 Vendor BiRank Scores")
+                vendor_scores = pd.DataFrame({'vendor': vendors, 'score': h})
+                for mat in materials:
+                    vendor_scores[f"{mat}_cost"] = vendor_scores['vendor'].apply(
+                        lambda v: supply_specs.get((mat, v), {}).get('price', 'n/a')
+                    )
+                st.dataframe(vendor_scores.sort_values('score', ascending=False).reset_index(drop=True))
+
+                # 5) Plot the bipartite network
+                st.subheader("🌐 Materials–Vendors Network")
+                G = nx.Graph()
+                G.add_nodes_from(materials, bipartite=0)
+                G.add_nodes_from(vendors,   bipartite=1)
+                for (m, v) in supply_specs:
+                    G.add_edge(m, v)
+                pos = nx.bipartite_layout(G, materials)
+
+                fig, ax = plt.subplots(figsize=(8,4))
+                # draw edges
+                all_e = list(G.edges())
+                opt_e = [(m,v) for (m,v) in all_e if v in best_subset]
+                other_e = [e for e in all_e if e not in opt_e]
+                nx.draw_networkx_edges(G, pos, edgelist=other_e, edge_color='lightgray', width=1, ax=ax)
+                nx.draw_networkx_edges(G, pos, edgelist=opt_e,     edge_color='red',       width=2, ax=ax)
+                # draw nodes
+                nx.draw_networkx_nodes(G, pos, nodelist=materials,
+                                    node_color='#4C72B0', node_shape='o', node_size=800, ax=ax)
+                base_vs = [v for v in vendors if v not in best_subset]
+                nx.draw_networkx_nodes(G, pos, nodelist=base_vs,
+                                    node_color='#55A868', node_shape='s', node_size=600, ax=ax)
+                nx.draw_networkx_nodes(G, pos, nodelist=best_subset,
+                                    node_color='#C44E52', node_shape='s', node_size=1000,
+                                    edgecolors='black', linewidths=2, ax=ax)
+                nx.draw_networkx_labels(G, pos, font_size=9, ax=ax)
+                # legend
+                handles = [
+                    mpatches.Patch(color='#4C72B0', label='Materials'),
+                    mpatches.Patch(color='#55A868', label='Vendors'),
+                    mpatches.Patch(color='#C44E52', label='Optimal Vendors'),
+                    mpatches.Patch(color='red',       label='Selected Edges'),
+                ]
+                ax.legend(handles=handles, bbox_to_anchor=(1.05,1), loc='upper left')
+                ax.axis('off')
+                st.pyplot(fig)
+
+                # --- FOOTER (KEPT AS REQUESTED) ---
+                st.markdown("---")
+                st.markdown(
+                    """
+                    <div style='text-align:center; color:#4e6a89; margin-top:40px; padding: 20px;'>
+                        <p><strong>SupplyScout</strong> &copy; 2025 | Streamlining Scientific Procurement</p>
+                        <p style='font-size: 0.8em;'>Built with Streamlit | Version 1.0.0</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                
+
+                #st.markdown("#### Extracted Product Specifications:")
+                #st.json(response_data) # Display the extracted dictionary
             else:
                 st.error("No valid product specifications could be extracted.")
                 
@@ -187,204 +342,9 @@ with st.sidebar:
             st.warning("Please enter a search query first!")
 
 
-########### OUTPUTS ###########
-# --- MAIN AREA: GRAPH FROM SEPARATE FILE ---
-st.markdown("### Product Comparison Overview")
 
-if 'search_results' in st.session_state:
-    st.info("Generating comparison graph based on extracted specifications...")
-    
-    extracted_products = list(st.session_state['search_results'].keys())
-    if extracted_products:
-        n_points = len(extracted_products)
-        x = np.random.uniform(1, 10, n_points) 
-        y = np.random.uniform(1, 10, n_points) 
-        
-        fig, ax = plt.subplots(figsize=(12, 6))
-        scatter = ax.scatter(x, y, c='#a3c9f9', s=120, edgecolors='#22304a', linewidth=2, alpha=0.8)
-        
-        for i, label in enumerate(extracted_products):
-            ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=10, fontweight='bold')
-        
-        ax.set_facecolor("#1a2332")
-        fig.patch.set_facecolor('#1a2332')
-        
-        for spine in ax.spines.values():
-            spine.set_color('#a3c9f9')
-            spine.set_linewidth(1.5)
-        
-        ax.tick_params(axis='both', colors='#a3c9f9', labelsize=10)
-        ax.set_xlabel("Cost (simulated)", color='#a3c9f9', fontsize=12, fontweight='bold')
-        ax.set_ylabel("Quality (simulated)", color='#a3c9f9', fontsize=12, fontweight='bold')
-        ax.grid(True, alpha=0.3, color='#a3c9f9')
-        ax.set_title(f"Product Comparison for '{st.session_state.get('last_search', 'Your Search')}'", color='#e0e6ed', fontsize=14, fontweight='bold', pad=20)
-        
-        st.pyplot(fig)
-    else:
-        st.warning("No products extracted to display on the graph.")
-        st.info("Displaying placeholder graph...")
-        np.random.seed(42)
-        n_points = 8
-        x = np.random.uniform(1, 10, n_points)
-        y = np.random.uniform(1, 10, n_points)
-        labels = [f"Product {i+1}" for i in range(n_points)]
-        
-        fig, ax = plt.subplots(figsize=(12, 6))
-        scatter = ax.scatter(x, y, c='#a3c9f9', s=120, edgecolors='#22304a', linewidth=2, alpha=0.8)
-        
-        for i, label in enumerate(labels):
-            ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=10, fontweight='bold')
-        
-        ax.set_facecolor("#1a2332")
-        fig.patch.set_facecolor('#1a2332')
-        
-        for spine in ax.spines.values():
-            spine.set_color('#a3c9f9')
-            spine.set_linewidth(1.5)
-        
-        ax.tick_params(axis='both', colors='#a3c9f9', labelsize=10)
-        ax.set_xlabel("Cost", color='#a3c9f9', fontsize=12, fontweight='bold')
-        ax.set_ylabel("Quality", color='#a3c9f9', fontsize=12, fontweight='bold')
-        ax.grid(True, alpha=0.3, color='#a3c9f9')
-        ax.set_title("Product Comparison", color='#e0e6ed', fontsize=14, fontweight='bold', pad=20)
-        st.pyplot(fig)
-        
-else:
-    st.info("Perform a search to see product comparison visualization")
-    st.markdown("#### Sample Visualization")
-    np.random.seed(42)
-    n_points = 5
-    x = np.random.uniform(1, 10, n_points)
-    y = np.random.uniform(1, 10, n_points)
-    labels = [f"Sample {i+1}" for i in range(n_points)]
-    
-    fig, ax = plt.subplots(figsize=(10, 5))
-    scatter = ax.scatter(x, y, c='#a3c9f9', s=100, edgecolors='#22304a', linewidth=2, alpha=0.6)
-    
-    for i, label in enumerate(labels):
-        ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=9)
-    
-    ax.set_facecolor("#1a2332")
-    fig.patch.set_facecolor('#1a2332')
-    
-    for spine in ax.spines.values():
-        spine.set_color('#a3c9f9')
-        spine.set_linewidth(1.5)
-    
-    ax.tick_params(axis='both', colors='#a3c9f9', labelsize=9)
-    ax.set_xlabel("Cost ($)", color='#a3c9f9', fontsize=11, fontweight='bold')
-    ax.set_ylabel("Quality Score", color='#a3c9f9', fontsize=11, fontweight='bold')
-    ax.grid(True, alpha=0.3, color='#a3c9f9')
-    ax.set_title("Sample Product Comparison", color='#e0e6ed', fontsize=12, fontweight='bold', pad=15)
-    
-    st.pyplot(fig)
+#OUTPUTS
+st.markdown("### Product Comparison & Vendor Ranking")
 
-# --- QUICK STATS SIDEBAR (Moved to right of graph) ---
-with st.sidebar:
-    if 'search_results' in st.session_state:
-        st.markdown("---")
-        st.markdown("### Search Summary")
-        
-        total_products = len(st.session_state['search_results']) if st.session_state['search_results'] else 0
-        
-        st.metric("Products Identified", total_products) 
-        st.metric("Last Search", st.session_state.get('last_search', 'None')[:20] + "...")
-        
-        if st.button("Export Graph", use_container_width=True):
-            st.success("Graph exported!")
-        
-        if st.button("Refresh Data", use_container_width=True):
-            st.info("Data refreshed!")
+# 1) Parse the user’s search_prompt as JSON → query_specs
 
-# --- SCROLLABLE TABLE SECTION ---
-st.markdown("---")
-st.markdown("### Detailed Search Results")
-
-if 'search_results' in st.session_state:
-    try:
-        extracted_data = st.session_state['search_results']
-        
-        if extracted_data:
-            table_rows = []
-            for product_name, specs in extracted_data.items():
-                row = {'Product': product_name}
-                for spec_key, spec_value in specs.items():
-                    row[spec_key.replace('_', ' ').title()] = spec_value 
-                table_rows.append(row)
-            
-            df = pd.DataFrame(table_rows)
-            
-            col1, col2, col3 = st.columns([2, 2, 1])
-            with col1:
-                search_filter = st.text_input("Filter results", placeholder="Search in table...")
-            with col2:
-                sortable_columns = [col for col in df.columns if col != 'Product']
-                sort_by = st.selectbox("Sort by", sortable_columns if sortable_columns else ["Product"])
-            with col3:
-                show_all = st.checkbox("Show all", value=True)
-            
-            if search_filter:
-                df = df[df.astype(str).apply(lambda x: x.str.contains(search_filter, case=False, na=False)).any(axis=1)]
-            
-            if sort_by in df.columns:
-                df = df.sort_values(by=sort_by)
-
-            st.dataframe(
-                df, 
-                use_container_width=True,
-                height=400 
-            )
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                csv = df.to_csv(index=False)
-                st.download_button(
-                    label="Download CSV",
-                    data=csv,
-                    file_name=f"supplyscout_results_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.csv",
-                    mime="text/csv",
-                    use_container_width=True
-                )
-            
-            with col2:
-                if st.button("Export Excel", use_container_width=True):
-                    st.info("Excel export feature coming soon!")
-            
-            with col3:
-                if st.button("Email Results", use_container_width=True):
-                    st.info("Email sharing coming soon!")
-        else:
-            st.warning("No detailed product data received from extraction.")
-            st.info("Displaying sample data...")
-            
-            sample_data = {
-                'Vendor': ['ThorLabs', 'Newport', 'Edmund Optics', 'Coherent', 'Hamamatsu'],
-                'Product': ['Quantum Sensor A', 'Sensor Pro B', 'OptiSense C', 'QuanTech D', 'PhotoSense E'],
-                'Price ($)': [1200, 950, 1800, 750, 1400],
-                'Lead Time': ['3-5 days', '5-7 days', '2-4 days', '7-10 days', '4-6 days'],
-                'Rating': [4.8, 4.6, 4.7, 4.5, 4.9],
-                'Location': ['UK', 'US', 'Germany', 'US', 'Japan']
-            }
-            
-            df = pd.DataFrame(sample_data)
-            st.dataframe(df, use_container_width=True, height=300)
-            
-    except Exception as e:
-        st.error(f"Error generating table: {str(e)}")
-        st.info("Sample data will be shown instead")
-
-else:
-    st.info("Perform a search to see detailed vendor results")
-    st.markdown("*Results will include vendor information, pricing, lead times, and contact details*")
-
-# --- FOOTER (KEPT AS REQUESTED) ---
-st.markdown("---")
-st.markdown(
-    """
-    <div style='text-align:center; color:#4e6a89; margin-top:40px; padding: 20px;'>
-        <p><strong>SupplyScout</strong> &copy; 2025 | Streamlining Scientific Procurement</p>
-        <p style='font-size: 0.8em;'>Built with Streamlit | Version 1.0.0</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)

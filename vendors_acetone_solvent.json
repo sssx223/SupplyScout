@@ -1,133 +1,53 @@
 {
-  "total_vendors": 32,
+  "total_vendors": 12,
   "vendors": [
     {
-      "vendor_name": "dock pharmacy",
-      "product_page_url": "https://www.dockpharmacy.com/product/care-acetone-50ml/"
-    },
-    {
-      "vendor_name": "rae prostores",
-      "product_page_url": "https://rae-prostores.com/products/rae-acetone-solvent"
-    },
-    {
-      "vendor_name": "amazon.com",
-      "product_page_url": "https://www.amazon.com/Beauty-Secrets-Acetone-Manicurist-Solvent/dp/B004ETD8RK"
-    },
-    {
-      "vendor_name": "easy composites",
-      "product_page_url": "https://www.easycomposites.co.uk/pure-acetone"
+      "vendor_name": "acquire chemicals",
+      "product_page_url": "https://www.acquirechemicals.com/acetone-solvent-3247954.html"
     },
     {
       "vendor_name": "saniclean",
       "product_page_url": "https://www.ebay.at/itm/184004463325"
     },
     {
-      "vendor_name": "meru chem pvt. ltd.",
-      "product_page_url": "https://www.meruchem.com/acetone-solvent-6852290.html"
+      "vendor_name": "kiki's industrial chemicals ltd",
+      "product_page_url": "https://kikisindustrialchemicals.co.ke/product/buy-pure-acetone-solvent-99-9-laboratory-grade-kenya/"
     },
     {
-      "vendor_name": "advanced paints",
-      "product_page_url": "https://www.advancedpaints.co.uk/product/acetone-solvent-cleaner/"
-    },
-    {
-      "vendor_name": "geet chem specialities",
-      "product_page_url": "https://www.geetchem.com/acetone-solvent-8359820.html"
+      "vendor_name": "easy composites",
+      "product_page_url": "https://www.easycomposites.eu/pure-acetone"
     },
     {
       "vendor_name": "woodcraft",
       "product_page_url": "https://www.woodcraft.com/products/klean-strip-acetone-solvent-quart"
     },
     {
-      "vendor_name": "acquire chemicals",
-      "product_page_url": "https://www.acquirechemicals.com/acetone-solvent-3247954.html"
-    },
-    {
-      "vendor_name": "lawsons",
-      "product_page_url": "https://www.lawsons.co.uk/cure-it-1ltr-acetone-solvent-cleaner-h00001492"
-    },
-    {
-      "vendor_name": "g.r. pahwa enterprises",
-      "product_page_url": "https://www.grpahwa.net/acetone-chemical.html"
-    },
-    {
-      "vendor_name": "kfa",
-      "product_page_url": "https://kfa-co.com/product/acetone/"
-    },
-    {
-      "vendor_name": "ree atharva lifescience pvt. ltd.",
-      "product_page_url": "http://www.reeatharva.com/industrial-acetone-solvent-7288030.html"
-    },
-    {
-      "vendor_name": "chemical superstore",
-      "product_page_url": "https://chemicalsuperstore.co.uk/shop/industrokhem/liquids/1l-20l-acetone-pure-acetone-acrylic-nail-remover-nail-polish-remover-99-8/"
-    },
-    {
-      "vendor_name": "rayan trading",
-      "product_page_url": "https://rayantradingbd.com/product-detail/acetone-solvent-cleaner-for-industrial-equipment-cleaning-25-litres-drum"
-    },
-    {
-      "vendor_name": "rae products & chemicals corp.",
-      "product_page_url": "https://rae-products.com/shop-page/sample-product/acetone-solvent/"
-    },
-    {
-      "vendor_name": "streifeneder",
-      "product_page_url": "https://streifeneder.de/en/op/produkt/116P2/"
-    },
-    {
       "vendor_name": "suraj enterprises",
       "product_page_url": "https://www.suraj-enterprises.in/acetone-solvent.html"
-    },
-    {
-      "vendor_name": "amiyodaya petrochem products pvt. ltd.",
-      "product_page_url": "https://amiyodaya.com/products/acetone-solvent/"
-    },
-    {
-      "vendor_name": "chemlink corporation",
-      "product_page_url": "https://www.chemlinkcorporation.com/acetone-solvent"
-    },
-    {
-      "vendor_name": "cleaningsupplies.co.uk",
-      "product_page_url": "https://www.cleaningsupplies.co.uk/products/craftex-acetone-solvent-glue-remover--each"
     },
     {
       "vendor_name": "euro industry",
       "product_page_url": "http://euro-industry.com/main.php?index=details&cat=1852&prod=23211438&lang=de"
     },
     {
-      "vendor_name": "marken chemicals",
-      "product_page_url": "https://www.markenchemicals.co.uk/acetone-cleaning-wipes/"
-    },
-    {
-      "vendor_name": "mistral industrial chemicals",
-      "product_page_url": "https://mistralni.co.uk/products/acetone"
-    },
-    {
-      "vendor_name": "greenwell biotech",
-      "product_page_url": "https://www.greenwellbiotech.co.in/acetone-solvent-6948010.html"
-    },
-    {
       "vendor_name": "multi chem",
       "product_page_url": "https://www.multichem104.com/acetone-solvent-8307176.html"
     },
     {
-      "vendor_name": "marine industrial",
-      "product_page_url": "https://www.marineindustrial.co.uk/solvents/marine-industrial/acetone-solvent-no4-1l"
+      "vendor_name": "amiyodaya petrochem products pvt. ltd.",
+      "product_page_url": "https://amiyodaya.com/products/acetone-solvent/"
+    },
+    {
+      "vendor_name": "arihant enterprises",
+      "product_page_url": "https://www.arihantenterprisesindia.com/acetone-solvent.html"
     },
     {
       "vendor_name": "arima chemicals & systems",
       "product_page_url": "https://www.arimachemicals.com/acetone-solvent-chemical-9921372.html"
     },
     {
-      "vendor_name": "kiki's industrial chemicals ltd",
-      "product_page_url": "https://kikisindustrialchemicals.co.ke/product/buy-pure-acetone-solvent-99-9-laboratory-grade-kenya/"
-    },
-    {
-      "vendor_name": "arett sales corporation",
-      "product_page_url": "https://arett.com/item/A13+FG32ACETON/Acetone-Solvent-Spray-Bottle/"
-    },
-    {
-      "vendor_name": "arihant enterprises",
-      "product_page_url": "https://www.arihantenterprisesindia.com/acetone-solvent.html"
+      "vendor_name": "kfa",
+      "product_page_url": "https://kfa-co.com/product/acetone/"
     }
   ]
 }
