@@ -271,6 +271,19 @@ with st.sidebar:
                 for key in response_data.keys():
                     subprocess.run(["python","-m","modal","run","vendor_search_modal.py","--product",key])
 
+                for key in response_data.keys():
+                    #
+
+                    output_string = f"{key}"
+
+                    # Iterate through the items (key-value pairs) in response_data
+                    for attr_key, attr_value in response_data[key].items():
+                        output_string += f" {attr_value}"
+                    print(output_string)
+                    subprocess.run(["python","-m","modal","run","webscrapper.py","--json-file-path",f"vendors_{key.replace(" ", "_")}.json","--output-file-name", f"{key.replace(" ", "_")}_product_data.json", "--material-context", output_string])
+                
+                
+
                 #st.markdown("#### Extracted Product Specifications:")
                 #st.json(response_data) # Display the extracted dictionary
             else:
