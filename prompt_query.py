@@ -63,12 +63,14 @@ def get_dictionary_from_prompt(user_prompt: str) -> dict:
         # Assuming the model reliably outputs JSON within curly braces
         match = re.search(r'\{.*\}', response.text, re.DOTALL)
         if match:
-            parsed_json = json.loads(match.group(0))
-            print(f"Successfully parsed JSON: {parsed_json}") # Log success
-            return parsed_json
+    # If match.group(0) is already a dictionary, no parsing is needed.
+    # Otherwise, you would assign the dictionary directly.
+            parsed_dict = match.group(0) 
+            print(f"Successfully processed dictionary: {parsed_dict}") # Log success
+            return parsed_dict
         else:
-            print("Error: No valid JSON object found in the model's response. Full response:")
-            print(response.text) # Print full response if no JSON found
+            print("Error: No valid dictionary object found in the model's response. Full response:")
+            print(response.text) # Print full response if no dictionary found
             return {}
     except Exception as e:
         print(f"An error occurred during API call or parsing: {e}")

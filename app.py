@@ -7,7 +7,7 @@ import os # NEW: Import os for API key
 import json
 import re # NEW: Import re
 from dotenv import load_dotenv # NEW: Import load_dotenv
-
+import subprocess
 load_dotenv()
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -260,14 +260,19 @@ with st.sidebar:
         if search_prompt.strip():
             with st.spinner("Searching for products..."):
                 response_data = get_dictionary_from_prompt(search_prompt)
-            
+                
+
+
             if response_data:
-                st.success("Search completed successfully!")
+                #st.success("Search completed successfully!")
                 st.session_state['search_results'] = response_data
                 st.session_state['last_search'] = search_prompt
                 
-                st.markdown("#### Extracted Product Specifications:")
-                st.json(response_data) # Display the extracted dictionary
+                for key in response_data.keys():
+                    subprocess.run(["python","-m","modal","run","vendor_search_modal.py","--product",key])
+
+                #st.markdown("#### Extracted Product Specifications:")
+                #st.json(response_data) # Display the extracted dictionary
             else:
                 st.error("No valid product specifications could be extracted.")
                 

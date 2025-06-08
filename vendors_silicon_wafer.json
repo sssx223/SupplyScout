@@ -1,0 +1,77 @@
+{
+  "total_vendors": 18,
+  "vendors": [
+    {
+      "vendor_name": "microchemicals",
+      "product_page_url": "https://www.microchemicals.com/FZ-Si-wafer-4-inch-300-um-111-DSP/WFC40300250X1718SNN1"
+    },
+    {
+      "vendor_name": "shilpa enterprises",
+      "product_page_url": "https://shilpent.com/products/105-silicon-wafers.html"
+    },
+    {
+      "vendor_name": "wafer universe",
+      "product_page_url": "https://waferuniverse.com/silicon-wafers/"
+    },
+    {
+      "vendor_name": "ultra nanotech",
+      "product_page_url": "https://ultrananotec.com/product/silicon-wafer-intrinsic-2-inch-2/"
+    },
+    {
+      "vendor_name": "inseto",
+      "product_page_url": "https://www.inseto.com/product-category/semiconductor-wafers/si_wafer/"
+    },
+    {
+      "vendor_name": "waferpro",
+      "product_page_url": "https://waferpro.com/product-category/wafer-type/silicon-wafer/"
+    },
+    {
+      "vendor_name": "aireka cells",
+      "product_page_url": "https://airekacells.com/ssp-silicon-wafer-5-125mm-prime-grade.html"
+    },
+    {
+      "vendor_name": "okmetic",
+      "product_page_url": "https://www.okmetic.com/silicon-wafers/"
+    },
+    {
+      "vendor_name": "siegert wafer gmbh",
+      "product_page_url": "https://www.siegertwafer.de/Si-Wafer.html"
+    },
+    {
+      "vendor_name": "nanoshel",
+      "product_page_url": "https://www.nanoshel.com/product/boron-doped-p-type-silicon-wafer"
+    },
+    {
+      "vendor_name": "dongshuo",
+      "product_page_url": "https://de.dsisolar.com/silicon-wafer/ic-wafer/12-inch-300mm-wafer.html"
+    },
+    {
+      "vendor_name": "ebay",
+      "product_page_url": "https://www.ebay.com/b/silicon-wafer/bn_7024813799"
+    },
+    {
+      "vendor_name": "amazon.co.uk",
+      "product_page_url": "https://www.amazon.co.uk/Silicon-Wafer-CPU-Integrated-Circuit/dp/B09KH3PDB3"
+    },
+    {
+      "vendor_name": "agar scientific",
+      "product_page_url": "https://www.agarscientific.com/silicon-wafers"
+    },
+    {
+      "vendor_name": "university wafer",
+      "product_page_url": "https://order.universitywafer.com/"
+    },
+    {
+      "vendor_name": "powerway wafer",
+      "product_page_url": "https://www.powerwaywafer.com/de/silicon-wafer/300-mm-silicon-wafers-300mm-tox-si-thermal-oxidation-wafer.html"
+    },
+    {
+      "vendor_name": "universitywafer, inc.",
+      "product_page_url": "https://order.universitywafer.com"
+    },
+    {
+      "vendor_name": "mse supplies llc",
+      "product_page_url": "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm"
+    }
+  ]
+}
