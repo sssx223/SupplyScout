@@ -8,7 +8,7 @@ import asyncio
 import requests
 
 app = modal.App(
-    name="material-scraper-app",
+    name="product-scraper-app",
     image=modal.Image.debian_slim().pip_install(
         "requests",
         "beautifulsoup4",
@@ -21,7 +21,7 @@ app = modal.App(
 )
 
 @app.function(secrets=[modal.Secret.from_name("my-google-search-secret")])
-def search_for_vendor_urls(material_name: str, num_results_per_query: int = 10) -> list[str]:
+def search_for_vendor_urls(product_name: str, num_results_per_query: int = 10) -> list[str]:
     from googleapiclient.discovery import build
     from googleapiclient.errors import HttpError
 
@@ -34,11 +34,11 @@ def search_for_vendor_urls(material_name: str, num_results_per_query: int = 10) 
     # Expanded search queries for international and multilingual results
     search_templates = {
         'en': [
-            'buy "{material}"', '"{material}" supplier', '"{material}" manufacturer price',
-            '"{material}" vendor', '"{material}" for sale'
+            'buy "{product}"', '"{product}" supplier', '"{product}" manufacturer price',
+            '"{product}" vendor', '"{product}" for sale'
         ],
         'de': [ # German
-            '"{material}" kaufen online', '"{material}" lieferant'
+            '"{product}" kaufen online', '"{product}" lieferant'
         ]
     }
 
@@ -54,7 +54,7 @@ def search_for_vendor_urls(material_name: str, num_results_per_query: int = 10) 
     # Iterate through each language and its corresponding query templates
     for lang, templates in search_templates.items():
         for template in templates:
-            query = template.format(material=material_name)
+            query = template.format(product=product_name)
             # Run a general search and then targeted searches for the specified countries
             for country in [None] + target_countries:
                 try:
@@ -104,7 +104,7 @@ async def get_webpage_text_with_browser(url: str) -> str | None:
     timeout=180,
     max_containers=20
 )
-async def get_vendor_info_from_url(url: str, material_name: str) -> dict | None:
+async def get_vendor_info_from_url(url: str, product_name: str) -> dict | None:
     import google.generativeai as genai
 
     webpage_text = await get_webpage_text_with_browser(url)
@@ -119,22 +119,22 @@ async def get_vendor_info_from_url(url: str, material_name: str) -> dict | None:
         return None
 
     prompt = f"""
-    You are an expert data extraction bot for a material science procurement project.
-    Your task is to analyze the text from a webpage and determine if it's a vendor selling the specific material: '{material_name}'.
+    You are a meticulous data extraction bot for a science procurement project.
+    Your task is to analyze the text from a webpage and determine if it's a vendor selling the specific product: '{product_name}'.
 
     From the provided webpage text, extract the following information:
-    1.  **vendor_name**: The name of the company/vendor selling the material. Be as precise as possible.
-    2.  **product_page_url**: The direct URL to the product page for '{material_name}'. This must be the most specific page possible for the material.
+    1.  **vendor_name**: The name of the company/vendor selling the product. Be as precise as possible.
+    2.  **product_page_url**: The direct URL to the product page for '{product_name}'. This must be the most specific page possible for the product.
 
     **Definition of a Product Page:**
-    A "product page" is a URL where the specific material ('{material_name}') can be directly purchased, has a detailed specification table, or has a form to "request a quote" for that specific item.
+    A "product page" is a URL where the specific product ('{product_name}') can be directly purchased, has a detailed specification table, or has a form to "request a quote" for that specific item.
     It must have some sort of buy/purchase button so that we know it is a product page.
     
     **Pages to AVOID:**
     - General homepages (e.g., vendor.com)
     - "About Us" or "Contact" pages.
-    - Broad category pages that list many different types of materials.
-    - Blog posts or news articles about the material.
+    - Broad category pages that list many different types of products.
+    - Blog posts or news articles about the product.
 
     The original URL provided was {url}. Use this URL only if it meets the definition of a product page. If you find a more specific link within the page text, use that instead.
 
@@ -190,16 +190,16 @@ def deduplicate_and_prioritize_vendors(vendors: list[dict]) -> list[dict]:
     return list(unique_vendors.values())
 
 @app.local_entrypoint()
-def main(material: str = typer.Option(..., help="The material to search for, e.g., 'silicon wafers'.")):
-    potential_urls = search_for_vendor_urls.remote(material)
+def main(product: str = typer.Option(..., help="The product to search for, e.g., 'silicon wafers'.")):
+    potential_urls = search_for_vendor_urls.remote(product)
     if not potential_urls:
         final_output = {"total_vendors": 0, "vendors": []}
-        output_filename = f"vendors_{material.replace(' ', '_')}.json"
+        output_filename = f"vendors_{product.replace(' ', '_')}.json"
         with open(output_filename, 'w') as f:
             json.dump(final_output, f, indent=2)
         return
 
-    vendor_results = list(get_vendor_info_from_url.map(potential_urls, kwargs={"material_name": material}))
+    vendor_results = list(get_vendor_info_from_url.map(potential_urls, kwargs={"product_name": product}))
 
     valid_vendors = [res for res in vendor_results if res]
     
@@ -211,6 +211,6 @@ def main(material: str = typer.Option(..., help="The material to search for, e.g
         "vendors": final_vendors
     }
     
-    output_filename = f"vendors_{material.replace(' ', '_')}.json"
+    output_filename = f"vendors_{product.replace(' ', '_')}.json"
     with open(output_filename, 'w') as f:
         json.dump(final_output, f, indent=2)

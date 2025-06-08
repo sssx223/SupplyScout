@@ -1,145 +1,132 @@
 {
-  "roguey": {
-    "https://roguey.co.uk/x4/wares/siliconwafers/": {
-      "name": "Silicon Wafers",
-      "price": 299.0,
-      "description": "If a technology requires any kind of chip, it is highly likely that is uses silicon wafers. Light, efficient and cheap to produce, these wafers are usually layered or constructed in hexagonal meshes to allow for quick transfer of data across a component.",
-      "source_url": "https://roguey.co.uk/x4/wares/siliconwafers/",
+  "washme.ie": {
+    "https://washme.ie/products/liquid-elements-ipa-isopropanol-1l": {
+      "name": "Liquid Elements IPA - Isopropanol Alcohol 99.9%",
+      "brand": "Liquid Elements",
+      "price": 10.0,
+      "currency": "EUR",
+      "description": "Liquid Elements IPA Isopropanol, also called 99.9% Isopropyl Alcohol or Rubbing Alcohol, offers an optimal method to thoroughly clean and degrease surfaces without residue. Highlights Frees and degreased surfaces from polishing and silicone residues after polishing 99.9% pure isopropyl alcohol Dilutable with water 70/30, 50/50 or 30/70 Whether before applying waxes or sealants, for cleaning before polishing or as panel wipe, with Isopropyl all fats, fillers or other impurities can be removed.IPA is also very suitable for household use and, among other things, for the removal of resins, ink, grease stains and much more. The 1L bottle comes with a spray trigger, while the 5-litre carton features a built-in tap for easy refilling of your spray bottle. How to use IPA Dilute IPA with water if necessary Spray painted surface generously (Do not treat unpainted plastics or rubbers with IPA) Remove with clean and fine microfibre cloth Important H319 - Causes severe eye irritation H225 - Liquid and vapour highly flammable H336 - May cause drowsiness and dizziness",
+      "image_url": "https://washme.ie/cdn/shop/files/LiquidElementsIPA-Isopropanol_jpg.webp?v=1738840708&width=1920",
+      "source_url": "https://washme.ie/products/liquid-elements-ipa-isopropanol-1l",
       "match_score": 1.0,
-      "Ware type": "Container",
-      "Ware subtype": "Refined",
-      "Ware volume": "18",
-      "Ware ID": "siliconwafers",
-      "Primary resources": "90 x Energy Cells, 240 x Silicon",
-      "Production cycle": "Cycle time 3 mins, Batch size 107 units",
-      "Products per hour": "2,140.0",
-      "Cycles per hour": "20.0"
+      "Purity": "99.9%",
+      "Alcohol Type": "Isopropyl Alcohol",
+      "Volume": "1L, 5L",
+      "Packaging": "1L bottle with spray trigger, 5L carton with built-in tap"
     }
   },
-  "mse supplies llc": {
-    "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm": {
-      "name": "MSE PRO 100 mm N Type (P-doped) Prime Grade Silicon Wafer <100>, SSP, 1-10 ohm-cm",
-      "brand": "MSE Supplies LLC",
-      "price": 32.95,
-      "currency": "USD",
-      "description": "100 mm N Type (P-doped) SEMI Standard Prime Grade Silicon Wafer <100>, 1-10 ohm-cm, Single Side Polished, 4 inch Si Wafer. Product SKU#: WA0802. Product Specifications Material: Single Crystal Silicon Wafer Growth Method: MCZ Orientation: <100> Diameter: 100 mm +/- 0.5 mm Thickness: 525 um +/- 20 um (SSP) Primary Flat Orientation: <110> +/-1 deg Primary Flat Length: 32.5 +/- 2.5 mm Secondary Flat Orientation: 90 deg from primary flat Secondary Flat Length: 18.0 +/- 2.0 mm Type/ Dopant: N/ Phosphorus Thermal Expansion Coefficient: 2.6·10-6°C -1 Electrical Resistivity: 1-10 ohm-cm RRV: 8% (6mm) Oxygen Content: 1.6 x 10^18 atoms/cm3 Carbon Content: 0.5 ppm GBIR/ TTV: 5 um WARP: 30 um BOW: 30 um Front Surface: CMP Polished, Ra < 0.5 nm (single side polished, SSP) Package: Packaged in a class 100 clean room environment, in cassettes of 25 pcs under vacuum or in single wafer containers.",
-      "source_url": "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm",
-      "match_score": 0.8,
-      "Material": "Single Crystal Silicon Wafer",
-      "Growth Method": "MCZ",
-      "Orientation": "<100>",
-      "Diameter": "100 mm +/- 0.5 mm",
-      "Thickness": "525 um +/- 20 um",
-      "Primary Flat Orientation": "<110> +/-1 deg",
-      "Primary Flat Length": "32.5 +/- 2.5 mm",
-      "Secondary Flat Orientation": "90 deg from primary flat",
-      "Secondary Flat Length": "18.0 +/- 2.0 mm",
-      "Type/Dopant": "N/ Phosphorus",
-      "Thermal Expansion Coefficient": "2.6·10-6°C -1",
-      "Electrical Resistivity": "1-10 ohm-cm",
-      "RRV": "8% (6mm)",
-      "Oxygen Content": "1.6 x 10^18 atoms/cm3",
-      "Carbon Content": "0.5 ppm",
-      "GBIR/TTV": "5 um",
-      "WARP": "30 um",
-      "BOW": "30 um",
-      "Front Surface": "CMP Polished, Ra < 0.5 nm",
-      "Package": "Packaged in a class 100 clean room environment, in cassettes of 25 pcs under vacuum or in single wafer containers."
-    }
-  },
-  "agar scientific": {
-    "https://www.agarscientific.com/silicon-wafers": {
-      "name": "Silicon Wafer",
-      "price": 59.19,
+  "tradechemicals": {
+    "https://www.ebay.co.uk/itm/232494818691": {
+      "name": "Isopropyl IPA Isopropanol Alcohol 99.9% Pure 1L Bottle with Safety cap",
+      "brand": "Pure Chem",
+      "price": 7.49,
       "currency": "GBP",
-      "description": "2\", 3\", 4\" and 6\" diameter silicon wafers.",
-      "source_url": "https://www.agarscientific.com/silicon-wafers",
+      "description": "New. A brand-new, unused, unopened and undamaged item in original retail packaging (where packaging is applicable). If the item comes direct from a manufacturer, it may be delivered in non-retail packaging, such as a plain or unprinted box or plastic bag. See the seller's listing for full details. Isopropyl IPA Isopropanol Alcohol 99.9%. Isopropanol 99.9% is used widely as a solvent and as a cleaning fluid.",
+      "image_url": "https://i.ebayimg.com/images/g/Ch0AAOSwd~5g4wAE/s-l1600.jpg",
+      "source_url": "https://www.ebay.co.uk/itm/232494818691",
+      "match_score": 0.9,
+      "Purity": "99.9%",
+      "Volume": "1L",
+      "Packaging": "Bottle with Safety cap"
+    }
+  },
+  "medguard": {
+    "https://www.medguard.ie/isopropanol-alcohol-99-9-acs-1litre.html": {
+      "name": "Isopropanol Alcohol 99.9% ACS (1 Litre)",
+      "price": 21.0,
+      "currency": "EUR",
+      "description": "Isopropanol 99.9% ACS (1 Litre) is a high-purity solvent and cleaning fluid ideal for cleaning electronic devices, removing smudges, dirt, and glue. It is versatile, flammable, and miscible with water, suitable for many applications.",
+      "image_url": "https://www.medguard.ie/media/catalog/product/cache/36dd7c5d94897de91338950056c6cc47/s/c/screenshot_84__1.png",
+      "source_url": "https://www.medguard.ie/isopropanol-alcohol-99-9-acs-1litre.html",
       "match_score": 1.0,
-      "Diameter": "4\" (102mm)",
-      "Type": "P Type"
+      "Purity": "99.9%",
+      "Volume": "1 Litre"
     }
   },
-  "techcet": {
-    "https://techcet.com/product/silicon-wafers/": {
-      "name": "Silicon Wafers Market Report CMR 2024-2025 (Single User License)",
-      "brand": "Techcet",
-      "price": 8900.0,
-      "currency": "USD",
-      "description": "This report covers the market landscape and supply-chain for silicon wafers used in semiconductor device fabrication. It includes information about key suppliers, issues/trends in the material supply chain, estimates on supplier market share, and forecast for the material segments. Silicon wafers are the fundamental starting point for nearly all semiconductor device fabrication. As such, the criticality of the role that this material plays in the semiconductor supply chain is hard to refute and is treated as such accordingly in this Critical Materials Report™.  Contains data and analysis from TECHCET’s database and Sr. Analyst experience, as well as that developed from primary and secondary market research. Provides focused silicon wafers supply chain information for supply-chain managers, process integration and R&D directors, as well as business development and financial analysts. Covers information about key silicon wafer suppliers, issues/trends in the silicon wafer supply chain, estimates on supplier market share, and silicon wafer market forecasting. Includes 3 Quarterly Updates, with updates on market trends and forecasts from the analyst. Includes Single User License – provides 1 portal access login to techcet.com for one person, using 2FA (two-factor authentication). For Multi-User License information, click here. TECHCET Reports can be Included with CMC or DSS Membership, which includes 1:1 meeting time with the analyst – Click Here for Membership Info! For custom reports and consulting, email us here.",
-      "source_url": "https://techcet.com/product/silicon-wafers/",
-      "match_score": 0.8
+  "degros": {
+    "https://www.degros.nl/de/isopropanol-alkohol-999-prozent-1-liter.html": {
+      "name": "Isopropylalkohol / Isopropanol (99,9%)",
+      "brand": "Degros",
+      "price": 8.26,
+      "currency": "EUR",
+      "description": "Isopropylalkohol 99,9 Prozent, 1 Liter. Dieser sehr kraftvolle Entfetter mit 99,9 % Isopropylalkohol eignet sich hervorragend zum Reinigen und Entfetten von harten Oberflächen. Isopropyl wird häufig beruflich in Unternehmen, aber auch als Reinigungsmittel in Haushalten eingesetzt. Nicht zum Verzehr geeignet.",
+      "source_url": "https://www.degros.nl/de/isopropanol-alkohol-999-prozent-1-liter.html",
+      "match_score": 0.9,
+      "Purity": "99,9%",
+      "Volume": "1 Liter"
     }
   },
-  "university wafer": {
-    "https://order.universitywafer.com/": {
-      "name": "silicon wafer",
-      "brand": "UniversityWafer, Inc.",
-      "price": 55.0,
+  "ican london": {
+    "https://icanlondon.com/p/pure-isopropyl-alcohol-cleaning-fluid/": {
+      "name": "Isopropanol Alcohol Cleaning Fluid",
+      "brand": "iCan London",
+      "price": 8.0,
+      "currency": "GBP",
+      "description": "99.9% pure isopropyl alcohol multi-purpose cleaning fluid",
+      "source_url": "https://icanlondon.com/p/pure-isopropyl-alcohol-cleaning-fluid/",
+      "match_score": 0.9,
+      "Purity": "99.9%",
+      "Volume": "500ml",
+      "Type": "Spray"
+    }
+  },
+  "express chems": {
+    "https://expresschems.co.uk/products/isopropyl-alcohol-99-9-pure": {
+      "name": "Isopropyl Alcohol 99.9% Pure",
+      "price": 4.49,
+      "currency": "GBP",
+      "description": "Isopropyl Alcohol 99.9% Pure Powerful Surface Disinfectant: Kills 99.9% of Bacteria & Virus Effective for Cleaning Glass & Mirrors: Evaporates Quickly Perfect for cleaning computer screens, phones, iPad screens, and is non-streaking Sanitise and clean makeup brushes and use to fix broken powder foundation make-up and eyeshadow",
+      "source_url": "https://expresschems.co.uk/products/isopropyl-alcohol-99-9-pure",
+      "match_score": 0.9,
+      "Purity": "99.9%"
+    }
+  },
+  "shandong pulisi chemical co., ltd.": {
+    "https://pulisichem1.en.made-in-china.com/product/edpAMVfuXHUy/China-ISO-Propyl-Alcohol-Isopropanol-Isopropanol-Alcohol-99-9-.html": {
+      "name": "ISO-Propyl Alcohol / Isopropanol /Isopropanol Alcohol 99.9%",
+      "brand": "SHANDONG PULISI CHEMICAL CO., LTD.",
+      "price": 0.89,
       "currency": "USD",
-      "description": "silicon wafer low price high quality.  UniversityWafer, Inc. has a large inventory of silicon wafers and other semiconductor substrates with high-quality & low price. Buy as few as one wafer!  Various sizes and specifications are available, including wafers used for fluids in space experiments, collecting contamination, semiconductor packing application and mems research and development, nanoparticles research, semiconductor process development and semiconductor conductivity tests, Photolithography training, and AFM, XRD and SEM testing. Some wafers are sold \"as-is\".",
-      "image_url": "http://www.universitywafer.com/img/silicon-wafer.jpg",
-      "source_url": "https://order.universitywafer.com/",
-      "match_score": 0.8,
-      "Diameter": [
-        "50.8mm",
-        "76.2mm",
-        "100mm",
-        "150mm",
-        "200mm"
-      ],
-      "Thickness": [
-        "270um",
-        "275um",
-        "280um",
-        "300um",
-        "350um",
-        "380um",
-        "400um",
-        "406-480um",
-        "500um",
-        "1000um"
-      ],
-      "Orientation": [
-        "<100>",
-        "<111>"
-      ],
-      "Type": [
-        "P-type",
-        "N-type"
-      ],
-      "Resistivity": [
-        "1-10ohm.cm",
-        "0-100ohm/cm",
-        "0.001-0.005",
-        "1-10",
-        "0-100"
-      ],
-      "Flatness": "1.0 Fringe",
-      "Wedge": "<10 arc minutes",
-      "Surface Finish": [
-        "SSP",
-        "SSPPrime",
-        "SSPTest",
-        "SSPMECH"
-      ],
-      "Dopant": [
-        "Phosphorous"
-      ],
-      "Grade": [
-        "Prime",
-        "Test",
-        "Mechanical"
-      ],
-      "Other": [
-        "with flat",
-        "NO flats, COMPLETELY round",
-        "S/D: 10/5",
-        "CA: >90%",
-        "Protective bevel",
-        "AIN on Si., Heavily P Doped",
-        "Highly epitaxial AIN grown on Si.",
-        "Aluminum polar, AIN layer 25nm"
-      ]
+      "description": "ISO-Propyl Alcohol / Isopropanol /Isopropanol Alcohol 99.9%, Find Details and Price about Isopropyl-Alcohol Isopropyl Alcohol from ISO-Propyl Alcohol / Isopropanol /Isopropanol Alcohol 99.9% - SHANDONG PULISI CHEMICAL CO., LTD.  Colorless clarity liquid,No odour. Purity(%)99.9min. Water content(%)0.10max. Acidity(%)0.002max. Evaporation residue(%)0.002max. CarbonyI value(%)0.01max. Sulfide content (mg/kg)1max. It has a wide range of uses as organic raw materials and solvents. Used as a chromatographic analysis standard to determine barium, calcium, copper, magnesium, nickel,potassium, sodium, strontium, nitrous acid, cobalt, etc. Used as a defoaming agent for water-based fracturing fluids in oil wells. Air forms an explosive mixture,which can cause combustion and explosion when exposed to open flames and high heat, and can react stronglywith oxidants. Isopropyl alcohol as a cleaning agent, MOS grade is mainly used for discrete devices and medium and large-scale integrated circuit, BV - level is mainly used in very large scale integrated circuit technology. Used in electronic industry, also can be used as a cleaning agent. Used as the diluent of adhesive, cottonseed oil extraction agent, nitrocellulose, rubber, paint, shellac, alkaloids,grease and other solvents. Also used in antifreeze, dehydrating agent, preservative, antifoggant, medicine,pesticide,spices, cosmetics,printing industry and organic synthesis, etc. Used in the production of isopropyl ketone, isopropyl acetate and thymol and gasoline additives. Can be used in the animal tissue membrane skim.",
+      "image_url": "https://image.made-in-china.com/2f0j00uMalpYWPOmgo/ISO-Propyl-Alcohol-Isopropanol-Isopropanol-Alcohol-99-9-.webp",
+      "source_url": "https://pulisichem1.en.made-in-china.com/product/edpAMVfuXHUy/China-ISO-Propyl-Alcohol-Isopropanol-Isopropanol-Alcohol-99-9-.html",
+      "match_score": 0.9,
+      "CAS No.": "67-63-0",
+      "Formula": "C3h8o",
+      "EINECS": "200-661-7",
+      "Appearance": "Liquid",
+      "Molecular Weight": "60.06",
+      "Density": "0.7855g/Ml",
+      "Purity": "99.9%min",
+      "Melting Point": "-87.9 ºC",
+      "Boiling Point": "82.45 ºF",
+      "Flash Point": "12 ºC",
+      "Water Soluble": "Soluble in Water, But Also Soluble in Most Organic"
+    }
+  },
+  "chemical superstore": {
+    "https://chemicalsuperstore.co.uk/shop/industrokhem/liquids/isopropyl-alcohol-ipa-99-9/": {
+      "name": "IPA (Isopropanol Alcohol 99.9%)",
+      "brand": "INDUSTROKHEM",
+      "price": 6.99,
+      "currency": "GBP",
+      "description": "Isopropyl alcohol (IUPAC name 2-propanol), also called isopropanol, is a compound with the chemical formula C3H8O or C3H7OH or CH3CHOHCH3. It is a colorless, flammable chemical compound with a strong odor. It is the simplest example of a secondary alcohol, where the alcohol carbon atom is attached to two other carbon atoms sometimes shown as (CH3)2CHOH. It is a structural isomer of propanol. It has a wide variety of industrial and household uses.Properties of Isopropyl AlcoholIsopropyl alcohol is miscible in water, alcohol, ether, and chloroform. It will dissolve ethyl cellulose, polyvinyl butyral, many oils, alkaloids, gums and natural resins.[5] It is insoluble in salt solutions. Unlike ethanol or methanol, isopropyl alcohol can be separated from aqueous solutions by adding a salt such as sodium chloride, sodium sulfate, or any of several other inorganic salts, since the alcohol is much less soluble in saline solutions than in salt-free water. The process is colloquially called salting out, and causes concentrated isopropyl alcohol to separate into a distinct layer.[6]Isopropyl alcohol forms an azeotrope with water, which gives a boiling point of 80.37 °C (176.67 °F) and a composition of 87.7 wt% (91 vol%) isopropyl alcohol. Water-isopropyl alcohol mixtures have depressed melting points. It has a slightly bitter taste, and is not safe to drink.  Isopropyl alcohol becomes increasingly viscous with decreasing temperature. At temperatures below −70 °C (−94 °F), isopropyl alcohol resembles maple syrup in viscosityUses for IsopropylIdeal cleaning solution/degreaser for oil production zones.  Can be used in various areas where slippy surfaces are a problem.  Isopropanol is an excellent cleaning fluid and a fast evaporating fluid leaving a clean slip free finish.Using Isopropyl Alcohol to prevent water from freezing:10% alcohol:90% water will reduce the freezing point of water from 0 deg C to -3 deg C.20% alcohol:80% water will reduce the freezing point of water from 0 deg C to -7 deg C.40% alcohol:60% water will reduce the freezing point of water from 0 deg C to -20 deg CAt these sorts of mixes water will not freeze at its normal 0 Deg C.PLEASE NOTE: This product is not for human or animal consumption.",
+      "source_url": "https://chemicalsuperstore.co.uk/shop/industrokhem/liquids/isopropyl-alcohol-ipa-99-9/",
+      "match_score": 1.0,
+      "Purity": "99.9%",
+      "Chemical Formula": "C3H8O or C3H7OH or CH3CHOHCH3"
+    }
+  },
+  "as trim": {
+    "https://www.as-trim.co.uk/index.php?main_page=product_info&products_id=1630": {
+      "name": "Isopropanol Alcohol",
+      "price": 19.99,
+      "currency": "GBP",
+      "description": "2.5L Isopropanol Alcohol - 99.9% Pure Isopropanol Alcohol",
+      "source_url": "https://www.as-trim.co.uk/index.php?main_page=product_info&products_id=1630",
+      "match_score": 0.9,
+      "Volume": "2.5L",
+      "Purity": "99.9%"
     }
   }
 }
