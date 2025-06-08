@@ -185,7 +185,7 @@ if search_btn:
             st.session_state['last_search'] = search_prompt
             
             for key in response_data.keys():
-                #subprocess.run(["python","-m","modal","run","vendor_search_modal.py","--product",key])
+                subprocess.run(["python","-m","modal","run","vendor_search_modal.py","--product",key])
                 pass
             for key in response_data.keys():
                 #
@@ -196,7 +196,7 @@ if search_btn:
                 for attr_key, attr_value in response_data[key].items():
                     output_string += f" {attr_value}"
                 print(output_string)
-                #subprocess.run(["python","-m","modal","run","webscrapper.py","--json-file-path",f"vendors_{key.replace(" ", "_")}.json","--output-file-name", f"{key.replace(" ", "_")}_product_data.json", "--material-context", output_string])
+                subprocess.run(["python","-m","modal","run","webscrapper.py","--json-file-path",f"vendors_{key.replace(" ", "_")}.json","--output-file-name", f"{key.replace(" ", "_")}_product_data.json", "--material-context", output_string])
             
             # This is the list you would have generated in the previous step
             response_data__ = [key.replace(" ", "_") for key in response_data.keys()]
