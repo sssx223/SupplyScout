@@ -176,7 +176,7 @@ def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
 # ---------------------------------------------------------------------------
 # Gemini‑powered extraction
 # ---------------------------------------------------------------------------
-@app.function(secrets=[modal.Secret.from_name("my-api-key-secret2")])
+@app.function(secrets=[modal.Secret.from_name("my-secret-key-3")])
 def _llm_extract_product(text: str, *, temperature: float = 0.0, material_context: Optional[str] = None) -> Dict[str, Any]:
     """Use **Gemini** to turn raw *text* into structured product JSON."""
     gemini_api_key = os.environ.get("GEMINI_API_KEY")

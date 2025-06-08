@@ -99,7 +99,7 @@ async def get_webpage_text_with_browser(url: str) -> str | None:
         return None
 
 @app.function(
-    secrets=[modal.Secret.from_name("my-gemini-secret")],
+    secrets=[modal.Secret.from_name("my-secret-key-3")],
     retries=modal.Retries(max_retries=3, backoff_coefficient=2.0, initial_delay=5.0),
     timeout=180,
     max_containers=20
