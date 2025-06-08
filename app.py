@@ -2,7 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import google.generativeai as genai # NEW: Import genai
+import os # NEW: Import os for API key
+import json
+import re # NEW: Import re
+from dotenv import load_dotenv # NEW: Import load_dotenv
 
+load_dotenv()
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
     page_title="SupplyScout",
@@ -85,7 +91,7 @@ st.markdown("""
         .stButton>button:hover {
             background-color: #2a3a5a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box_shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         
         /* Input field styling */
@@ -159,6 +165,64 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+# --- FUNCTION TO EXTRACT PRODUCT SPECIFICATIONS (MOVED FROM MODAL) ---
+def get_dictionary_from_prompt(user_prompt: str) -> dict:
+    """
+    Parses a user's request and converts it into a structured dictionary
+    of product specifications using the Gemini API. This function runs directly in Streamlit.
+    """
+    try:
+        # Configure Gemini API using the secret (환경 변수에서 읽어옴)
+        # Ensure GEMINI_API_KEY is set in your environment before running Streamlit
+        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+    except KeyError:
+        st.error("Gemini API Key not found. Please set the 'GEMINI_API_KEY' environment variable.")
+        return {}
+    except Exception as e:
+        st.error(f"Error configuring Gemini API: {e}")
+        return {}
+
+    extraction_prompt = f"""
+        You are an expert data extraction AI. Your task is to parse a user's
+        request and convert it into a structured JSON object. The JSON object
+        should be a dictionary where each key is the product name (string) and
+        its value is a dictionary of that product's specifications.
+
+        EXAMPLE
+        User Prompt: "Silicon wafers, purity 99.999%, diameter 6 inches"
+        Correct Output:
+        json
+        {{
+          "Silicon wafers": {{
+            "purity": "99.999%",
+            "diameter": "6 inches"
+          }}
+        }}
+        
+        YOUR TASK
+        User Prompt: "{user_prompt}"
+
+        Respond ONLY with the single, valid JSON object.
+    """
+
+    try:
+        response = model.generate_content(extraction_prompt)
+        
+        # We can directly print to Streamlit's debug area or use st.info for visibility
+        # st.info(f"Gemini API Raw Response: {response.text}") 
+        
+        match = re.search(r'\{.*\}', response.text, re.DOTALL)
+        if match:
+            parsed_json = json.loads(match.group(0))
+            return parsed_json
+        else:
+            st.warning("No valid JSON object found in the model's response. Raw response:")
+            st.code(response.text) # Show raw response if no JSON found
+            return {}
+    except Exception as e:
+        st.error(f"An error occurred during API call or parsing: {e}")
+        return {}
 
 
 ######## INPUTS #########
@@ -180,7 +244,6 @@ with st.sidebar:
     st.markdown("#### Country/Region")
     st.markdown("Select countries to source from:")
     
-    # Create checkboxes for each country - these are just for display
     uk_selected = st.checkbox(" United Kingdom", value=True)
     us_selected = st.checkbox("United States", value=True)
     germany_selected = st.checkbox(" Germany", value=False)
@@ -192,117 +255,90 @@ with st.sidebar:
     # Single search button
     search_btn = st.button("Search Products", use_container_width=True, type="primary")
     
-    ######### Gemini API integration
+    # --- Direct Gemini API call (no Modal or subprocess) ---
     if search_btn:
         if search_prompt.strip():
-            st.success("Search initiated!")
+            with st.spinner("Searching for products..."):
+                response_data = get_dictionary_from_prompt(search_prompt)
             
-            # Call Gemini API with the prompt
-            try:
-                import subprocess
-                import sys
-                import json
+            if response_data:
+                st.success("Search completed successfully!")
+                st.session_state['search_results'] = response_data
+                st.session_state['last_search'] = search_prompt
                 
-                # pass the user's search prompt to vendor_search_modal.py
-                result = subprocess.run([
-                    sys.executable, 
-                    "vendor_search_modal.py",  ############## TO BE CHANGED TO GEMINI API######
-                    search_prompt  # Pass only the prompt as a string
-                ], capture_output=True, text=True)
+                st.markdown("#### Extracted Product Specifications:")
+                st.json(response_data) # Display the extracted dictionary
+            else:
+                st.error("No valid product specifications could be extracted.")
                 
-                if result.returncode == 0:
-                    # Process successful results
-                    response_data = json.loads(result.stdout)
-                    st.success("Search completed successfully!")
-                    
-                    # Store results in session state for use in main area
-                    st.session_state['search_results'] = response_data
-                    st.session_state['last_search'] = search_prompt
-                    
-                else:
-                    st.error(f"Search failed: {result.stderr}")
-                    
-            except Exception as e:
-                st.error(f"Error executing search: {str(e)}")
-            
         else:
             st.warning("Please enter a search query first!")
-
-
-
-
 
 
 ########### OUTPUTS ###########
 # --- MAIN AREA: GRAPH FROM SEPARATE FILE ---
 st.markdown("### Product Comparison Overview")
 
-# Check if we have search results to display
 if 'search_results' in st.session_state:
-    # Call separate Python file to generate graph
-    try:
-        import subprocess
-        import sys
-        import json
-        
-        # Pass search results to graph generator
-        graph_data = {
-            "search_results": st.session_state['search_results'],
-            "last_search": st.session_state.get('last_search', '')
-        }
-        
-        # Call your graph generation file
-        result = subprocess.run([
-            sys.executable, 
-            "graph_generator.py",  # Your graph generation file
-            json.dumps(graph_data)
-        ], capture_output=True, text=True)
-        
-        if result.returncode == 0:
-            # Graph file should be saved as 'comparison_graph.png'
-            st.image("comparison_graph.png", use_column_width=True)
-        else:
-            st.error("Failed to generate graph")
-            # Fallback to placeholder graph
-            st.info("Displaying placeholder graph...")
-            
-            # Placeholder graph code (your existing code as fallback)
-            np.random.seed(42)
-            n_points = 8
-            x = np.random.uniform(1, 10, n_points)
-            y = np.random.uniform(1, 10, n_points)
-            labels = [f"Product {i+1}" for i in range(n_points)]
-            
-            fig, ax = plt.subplots(figsize=(12, 6))
-            scatter = ax.scatter(x, y, c='#a3c9f9', s=120, edgecolors='#22304a', linewidth=2, alpha=0.8)
-            
-            for i, label in enumerate(labels):
-                ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=10, fontweight='bold')
-            
-            ax.set_facecolor("#1a2332")
-            fig.patch.set_facecolor('#1a2332')
-            
-            for spine in ax.spines.values():
-                spine.set_color('#a3c9f9')
-                spine.set_linewidth(1.5)
-            
-            ax.tick_params(axis='both', colors='#a3c9f9', labelsize=10)
-            ax.set_xlabel("Cost", color='#a3c9f9', fontsize=12, fontweight='bold')
-            ax.set_ylabel("Quality", color='#a3c9f9', fontsize=12, fontweight='bold')
-            ax.grid(True, alpha=0.3, color='#a3c9f9')
-            ax.set_title("Product Comparison", color='#e0e6ed', fontsize=14, fontweight='bold', pad=20)
-            
-            st.pyplot(fig)
-            
-    except Exception as e:
-        st.error(f"Error generating graph: {str(e)}")
-        st.info("Please perform a search to see results")
-
-else:
-    # Show placeholder when no search results
-    st.info("Perform a search to see product comparison visualization")
+    st.info("Generating comparison graph based on extracted specifications...")
     
-    # Optional: Show sample graph
+    extracted_products = list(st.session_state['search_results'].keys())
+    if extracted_products:
+        n_points = len(extracted_products)
+        x = np.random.uniform(1, 10, n_points) 
+        y = np.random.uniform(1, 10, n_points) 
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        scatter = ax.scatter(x, y, c='#a3c9f9', s=120, edgecolors='#22304a', linewidth=2, alpha=0.8)
+        
+        for i, label in enumerate(extracted_products):
+            ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=10, fontweight='bold')
+        
+        ax.set_facecolor("#1a2332")
+        fig.patch.set_facecolor('#1a2332')
+        
+        for spine in ax.spines.values():
+            spine.set_color('#a3c9f9')
+            spine.set_linewidth(1.5)
+        
+        ax.tick_params(axis='both', colors='#a3c9f9', labelsize=10)
+        ax.set_xlabel("Cost (simulated)", color='#a3c9f9', fontsize=12, fontweight='bold')
+        ax.set_ylabel("Quality (simulated)", color='#a3c9f9', fontsize=12, fontweight='bold')
+        ax.grid(True, alpha=0.3, color='#a3c9f9')
+        ax.set_title(f"Product Comparison for '{st.session_state.get('last_search', 'Your Search')}'", color='#e0e6ed', fontsize=14, fontweight='bold', pad=20)
+        
+        st.pyplot(fig)
+    else:
+        st.warning("No products extracted to display on the graph.")
+        st.info("Displaying placeholder graph...")
+        np.random.seed(42)
+        n_points = 8
+        x = np.random.uniform(1, 10, n_points)
+        y = np.random.uniform(1, 10, n_points)
+        labels = [f"Product {i+1}" for i in range(n_points)]
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        scatter = ax.scatter(x, y, c='#a3c9f9', s=120, edgecolors='#22304a', linewidth=2, alpha=0.8)
+        
+        for i, label in enumerate(labels):
+            ax.annotate(label, (x[i]+0.1, y[i]+0.1), color="#e0e6ed", fontsize=10, fontweight='bold')
+        
+        ax.set_facecolor("#1a2332")
+        fig.patch.set_facecolor('#1a2332')
+        
+        for spine in ax.spines.values():
+            spine.set_color('#a3c9f9')
+            spine.set_linewidth(1.5)
+        
+        ax.tick_params(axis='both', colors='#a3c9f9', labelsize=10)
+        ax.set_xlabel("Cost", color='#a3c9f9', fontsize=12, fontweight='bold')
+        ax.set_ylabel("Quality", color='#a3c9f9', fontsize=12, fontweight='bold')
+        ax.grid(True, alpha=0.3, color='#a3c9f9')
+        ax.set_title("Product Comparison", color='#e0e6ed', fontsize=14, fontweight='bold', pad=20)
+        st.pyplot(fig)
+        
+else:
+    st.info("Perform a search to see product comparison visualization")
     st.markdown("#### Sample Visualization")
     np.random.seed(42)
     n_points = 5
@@ -337,97 +373,78 @@ with st.sidebar:
         st.markdown("---")
         st.markdown("### Search Summary")
         
-        # Extract stats from search results
-        results = st.session_state['search_results']
-        total_vendors = results.get('total_vendors', 0)
+        total_products = len(st.session_state['search_results']) if st.session_state['search_results'] else 0
         
-        st.metric("Vendors Found", total_vendors)
+        st.metric("Products Identified", total_products) 
         st.metric("Last Search", st.session_state.get('last_search', 'None')[:20] + "...")
         
-        # Quick action buttons
         if st.button("Export Graph", use_container_width=True):
             st.success("Graph exported!")
         
         if st.button("Refresh Data", use_container_width=True):
             st.info("Data refreshed!")
 
-# --- SCROLLABLE TABLE SECTION FROM SEPARATE FILE ---
+# --- SCROLLABLE TABLE SECTION ---
 st.markdown("---")
 st.markdown("### Detailed Search Results")
 
 if 'search_results' in st.session_state:
-    # Call separate Python file to generate table
     try:
-        # Pass search results to table generator
-        table_data = {
-            "search_results": st.session_state['search_results'],
-            "last_search": st.session_state.get('last_search', '')
-        }
+        extracted_data = st.session_state['search_results']
         
-        ######### Call table generation file
-        result = subprocess.run([
-            sys.executable, 
-            "table_generator.py",  # Your table generation file
-            json.dumps(table_data)
-        ], capture_output=True, text=True)
-        
-        if result.returncode == 0:
-            # Table generator should output JSON with table data
-            table_results = json.loads(result.stdout)
+        if extracted_data:
+            table_rows = []
+            for product_name, specs in extracted_data.items():
+                row = {'Product': product_name}
+                for spec_key, spec_value in specs.items():
+                    row[spec_key.replace('_', ' ').title()] = spec_value 
+                table_rows.append(row)
             
-            # Display the generated table
-            if 'dataframe' in table_results:
-                df = pd.DataFrame(table_results['dataframe'])
-                
-                # Enhanced table display with filtering
-                col1, col2, col3 = st.columns([2, 2, 1])
-                with col1:
-                    search_filter = st.text_input("Filter results", placeholder="Search in table...")
-                with col2:
-                    sort_by = st.selectbox("Sort by", ["Vendor Name", "Price", "Rating", "Lead Time"])
-                with col3:
-                    show_all = st.checkbox("Show all", value=True)
-                
-                # Apply filters
-                if search_filter:
-                    df = df[df.astype(str).apply(lambda x: x.str.contains(search_filter, case=False, na=False)).any(axis=1)]
-                
-                # Display table with custom styling
-                st.dataframe(
-                    df, 
-                    use_container_width=True,
-                    height=400  # Fixed height for scrolling
+            df = pd.DataFrame(table_rows)
+            
+            col1, col2, col3 = st.columns([2, 2, 1])
+            with col1:
+                search_filter = st.text_input("Filter results", placeholder="Search in table...")
+            with col2:
+                sortable_columns = [col for col in df.columns if col != 'Product']
+                sort_by = st.selectbox("Sort by", sortable_columns if sortable_columns else ["Product"])
+            with col3:
+                show_all = st.checkbox("Show all", value=True)
+            
+            if search_filter:
+                df = df[df.astype(str).apply(lambda x: x.str.contains(search_filter, case=False, na=False)).any(axis=1)]
+            
+            if sort_by in df.columns:
+                df = df.sort_values(by=sort_by)
+
+            st.dataframe(
+                df, 
+                use_container_width=True,
+                height=400 
+            )
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                csv = df.to_csv(index=False)
+                st.download_button(
+                    label="Download CSV",
+                    data=csv,
+                    file_name=f"supplyscout_results_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.csv",
+                    mime="text/csv",
+                    use_container_width=True
                 )
-                
-                # Download options
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    if st.button("Download CSV", use_container_width=True):
-                        csv = df.to_csv(index=False)
-                        st.download_button(
-                            label="Save CSV",
-                            data=csv,
-                            file_name=f"supplyscout_results_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.csv",
-                            mime="text/csv"
-                        )
-                
-                with col2:
-                    if st.button("Export Excel", use_container_width=True):
-                        st.info("Excel export feature coming soon!")
-                
-                with col3:
-                    if st.button("Email Results", use_container_width=True):
-                        st.info("Email sharing coming soon!")
             
-            else:
-                st.warning("No table data received from generator")
-                
+            with col2:
+                if st.button("Export Excel", use_container_width=True):
+                    st.info("Excel export feature coming soon!")
+            
+            with col3:
+                if st.button("Email Results", use_container_width=True):
+                    st.info("Email sharing coming soon!")
         else:
-            st.error("Failed to generate table")
-            # Fallback table
+            st.warning("No detailed product data received from extraction.")
             st.info("Displaying sample data...")
             
-            # Sample fallback data
             sample_data = {
                 'Vendor': ['ThorLabs', 'Newport', 'Edmund Optics', 'Coherent', 'Hamamatsu'],
                 'Product': ['Quantum Sensor A', 'Sensor Pro B', 'OptiSense C', 'QuanTech D', 'PhotoSense E'],
@@ -459,4 +476,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
