@@ -1,0 +1,145 @@
+{
+  "roguey": {
+    "https://roguey.co.uk/x4/wares/siliconwafers/": {
+      "name": "Silicon Wafers",
+      "price": 299.0,
+      "description": "If a technology requires any kind of chip, it is highly likely that is uses silicon wafers. Light, efficient and cheap to produce, these wafers are usually layered or constructed in hexagonal meshes to allow for quick transfer of data across a component.",
+      "source_url": "https://roguey.co.uk/x4/wares/siliconwafers/",
+      "match_score": 1.0,
+      "Ware type": "Container",
+      "Ware subtype": "Refined",
+      "Ware volume": "18",
+      "Ware ID": "siliconwafers",
+      "Primary resources": "90 x Energy Cells, 240 x Silicon",
+      "Production cycle": "Cycle time 3 mins, Batch size 107 units",
+      "Products per hour": "2,140.0",
+      "Cycles per hour": "20.0"
+    }
+  },
+  "mse supplies llc": {
+    "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm": {
+      "name": "MSE PRO 100 mm N Type (P-doped) Prime Grade Silicon Wafer <100>, SSP, 1-10 ohm-cm",
+      "brand": "MSE Supplies LLC",
+      "price": 32.95,
+      "currency": "USD",
+      "description": "100 mm N Type (P-doped) SEMI Standard Prime Grade Silicon Wafer <100>, 1-10 ohm-cm, Single Side Polished, 4 inch Si Wafer. Product SKU#: WA0802. Product Specifications Material: Single Crystal Silicon Wafer Growth Method: MCZ Orientation: <100> Diameter: 100 mm +/- 0.5 mm Thickness: 525 um +/- 20 um (SSP) Primary Flat Orientation: <110> +/-1 deg Primary Flat Length: 32.5 +/- 2.5 mm Secondary Flat Orientation: 90 deg from primary flat Secondary Flat Length: 18.0 +/- 2.0 mm Type/ Dopant: N/ Phosphorus Thermal Expansion Coefficient: 2.6·10-6°C -1 Electrical Resistivity: 1-10 ohm-cm RRV: 8% (6mm) Oxygen Content: 1.6 x 10^18 atoms/cm3 Carbon Content: 0.5 ppm GBIR/ TTV: 5 um WARP: 30 um BOW: 30 um Front Surface: CMP Polished, Ra < 0.5 nm (single side polished, SSP) Package: Packaged in a class 100 clean room environment, in cassettes of 25 pcs under vacuum or in single wafer containers.",
+      "source_url": "https://www.msesupplies.com/products/mse-pro-100-mm-n-type-p-doped-prime-grade-silicon-wafer-100-ssp-1-10-ohm-cm",
+      "match_score": 0.8,
+      "Material": "Single Crystal Silicon Wafer",
+      "Growth Method": "MCZ",
+      "Orientation": "<100>",
+      "Diameter": "100 mm +/- 0.5 mm",
+      "Thickness": "525 um +/- 20 um",
+      "Primary Flat Orientation": "<110> +/-1 deg",
+      "Primary Flat Length": "32.5 +/- 2.5 mm",
+      "Secondary Flat Orientation": "90 deg from primary flat",
+      "Secondary Flat Length": "18.0 +/- 2.0 mm",
+      "Type/Dopant": "N/ Phosphorus",
+      "Thermal Expansion Coefficient": "2.6·10-6°C -1",
+      "Electrical Resistivity": "1-10 ohm-cm",
+      "RRV": "8% (6mm)",
+      "Oxygen Content": "1.6 x 10^18 atoms/cm3",
+      "Carbon Content": "0.5 ppm",
+      "GBIR/TTV": "5 um",
+      "WARP": "30 um",
+      "BOW": "30 um",
+      "Front Surface": "CMP Polished, Ra < 0.5 nm",
+      "Package": "Packaged in a class 100 clean room environment, in cassettes of 25 pcs under vacuum or in single wafer containers."
+    }
+  },
+  "agar scientific": {
+    "https://www.agarscientific.com/silicon-wafers": {
+      "name": "Silicon Wafer",
+      "price": 59.19,
+      "currency": "GBP",
+      "description": "2\", 3\", 4\" and 6\" diameter silicon wafers.",
+      "source_url": "https://www.agarscientific.com/silicon-wafers",
+      "match_score": 1.0,
+      "Diameter": "4\" (102mm)",
+      "Type": "P Type"
+    }
+  },
+  "techcet": {
+    "https://techcet.com/product/silicon-wafers/": {
+      "name": "Silicon Wafers Market Report CMR 2024-2025 (Single User License)",
+      "brand": "Techcet",
+      "price": 8900.0,
+      "currency": "USD",
+      "description": "This report covers the market landscape and supply-chain for silicon wafers used in semiconductor device fabrication. It includes information about key suppliers, issues/trends in the material supply chain, estimates on supplier market share, and forecast for the material segments. Silicon wafers are the fundamental starting point for nearly all semiconductor device fabrication. As such, the criticality of the role that this material plays in the semiconductor supply chain is hard to refute and is treated as such accordingly in this Critical Materials Report™.  Contains data and analysis from TECHCET’s database and Sr. Analyst experience, as well as that developed from primary and secondary market research. Provides focused silicon wafers supply chain information for supply-chain managers, process integration and R&D directors, as well as business development and financial analysts. Covers information about key silicon wafer suppliers, issues/trends in the silicon wafer supply chain, estimates on supplier market share, and silicon wafer market forecasting. Includes 3 Quarterly Updates, with updates on market trends and forecasts from the analyst. Includes Single User License – provides 1 portal access login to techcet.com for one person, using 2FA (two-factor authentication). For Multi-User License information, click here. TECHCET Reports can be Included with CMC or DSS Membership, which includes 1:1 meeting time with the analyst – Click Here for Membership Info! For custom reports and consulting, email us here.",
+      "source_url": "https://techcet.com/product/silicon-wafers/",
+      "match_score": 0.8
+    }
+  },
+  "university wafer": {
+    "https://order.universitywafer.com/": {
+      "name": "silicon wafer",
+      "brand": "UniversityWafer, Inc.",
+      "price": 55.0,
+      "currency": "USD",
+      "description": "silicon wafer low price high quality.  UniversityWafer, Inc. has a large inventory of silicon wafers and other semiconductor substrates with high-quality & low price. Buy as few as one wafer!  Various sizes and specifications are available, including wafers used for fluids in space experiments, collecting contamination, semiconductor packing application and mems research and development, nanoparticles research, semiconductor process development and semiconductor conductivity tests, Photolithography training, and AFM, XRD and SEM testing. Some wafers are sold \"as-is\".",
+      "image_url": "http://www.universitywafer.com/img/silicon-wafer.jpg",
+      "source_url": "https://order.universitywafer.com/",
+      "match_score": 0.8,
+      "Diameter": [
+        "50.8mm",
+        "76.2mm",
+        "100mm",
+        "150mm",
+        "200mm"
+      ],
+      "Thickness": [
+        "270um",
+        "275um",
+        "280um",
+        "300um",
+        "350um",
+        "380um",
+        "400um",
+        "406-480um",
+        "500um",
+        "1000um"
+      ],
+      "Orientation": [
+        "<100>",
+        "<111>"
+      ],
+      "Type": [
+        "P-type",
+        "N-type"
+      ],
+      "Resistivity": [
+        "1-10ohm.cm",
+        "0-100ohm/cm",
+        "0.001-0.005",
+        "1-10",
+        "0-100"
+      ],
+      "Flatness": "1.0 Fringe",
+      "Wedge": "<10 arc minutes",
+      "Surface Finish": [
+        "SSP",
+        "SSPPrime",
+        "SSPTest",
+        "SSPMECH"
+      ],
+      "Dopant": [
+        "Phosphorous"
+      ],
+      "Grade": [
+        "Prime",
+        "Test",
+        "Mechanical"
+      ],
+      "Other": [
+        "with flat",
+        "NO flats, COMPLETELY round",
+        "S/D: 10/5",
+        "CA: >90%",
+        "Protective bevel",
+        "AIN on Si., Heavily P Doped",
+        "Highly epitaxial AIN grown on Si.",
+        "Aluminum polar, AIN layer 25nm"
+      ]
+    }
+  }
+}

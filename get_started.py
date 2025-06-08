@@ -2,44 +2,53 @@ import os
 import re
 import json
 import urllib.request
-from typing import Dict, Any, List
+from typing import Dict, Any, List, TypedDict, Optional
 
 import modal
 from bs4 import BeautifulSoup
 import google.generativeai as genai
 
+# Define a TypedDict for clarity and type hinting for the JSON structure
+class VendorProduct(TypedDict):
+    vendor_name: str
+    product_page_url: str
+
+class VendorData(TypedDict):
+    total_vendors: int
+    vendors: List[VendorProduct]
+
 # ---------------------------------------------------------------------------
-# Vendor catalogue – add more URLs freely
+# Helper function to load URLs from a JSON file
 # ---------------------------------------------------------------------------
-url_dict: Dict[str, List[str]] = {
-    "MSE Supplies": [
-        "https://www.msesupplies.com/products/mse-pro-4-inch-sapphire-wafer-c-plane-single-or-double-side-polish-al-sub-2-sub-o-sub-3-sub-single-crystal",
-    ],
-    "CRYSCORE": [
-        "https://www.cryscore.com/products/4-inch-c-plane-0001-sapphire-wafers.html",
-    ],
-    "University Wafer": [
-        "https://www.universitywafer.com/4-inch-sapphire-wafers.html"
-    ],
-    "Sokatec": [
-        "https://sokatec.com/products/4-inch-sapphire-substrate"
-    ],
-    "Ultra Nanotech": [
-        "https://ultrananotec.com/product/sapphire-wafer-4-inch/"
-    ],
-    "Precision Micro-Optics": [
-        "https://www.pmoptics.com/sapphires_wafers.html"
-    ],
-    "Shanghai Famous Trade Co., Ltd.": [
-        "https://www.sapphire-substrate.com/buy-sapphire_wafer.html"
-    ],
-    "Gallium Nitride Wafer": [
-        "https://www.galliumnitridewafer.com/sale-53297255-sapphire-wafer-4-dia-76-2mm-0-1mm-thickness-550um-c-plane-99-99-pure.html"
-    ],
-    "WDQ Optics": [
-        "https://www.wdqoptics.com/products/4-inch-c-plane0001-sapphire-wafers"
-    ]
-}
+def load_urls_from_json(file_path: str) -> Dict[str, List[str]]:
+    """
+    Loads vendor URLs from a JSON file and formats them into the
+    url_dict structure: {"Vendor Name": ["url1", "url2"], ...}
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data: VendorData = json.load(f)
+        
+        url_dict: Dict[str, List[str]] = {}
+        for vendor_info in data['vendors']:
+            vendor_name = vendor_info['vendor_name']
+            product_url = vendor_info['product_page_url']
+            
+            if vendor_name not in url_dict:
+                url_dict[vendor_name] = []
+            url_dict[vendor_name].append(product_url)
+            
+        return url_dict
+    except FileNotFoundError:
+        print(f"Error: JSON file not found at {file_path}")
+        return {}
+    except json.JSONDecodeError:
+        print(f"Error: Could not decode JSON from {file_path}. Check file format.")
+        return {}
+    except KeyError as e:
+        print(f"Error: JSON file is missing expected key: {e}. Check file structure.")
+        return {}
+
 
 # ---------------------------------------------------------------------------
 # Modal setup (installs deps into the container)
@@ -58,8 +67,18 @@ app = modal.App(name="product-info-scraper-gemini", image=image)
 
 def _download(url: str) -> str:
     """Return raw HTML for *url* (UTF‑8 decoded)."""
-    with urllib.request.urlopen(url) as resp:
-        return resp.read().decode("utf-8", errors="ignore")
+    try:
+        with urllib.request.urlopen(url, timeout=15) as resp: 
+            return resp.read().decode("utf-8", errors="ignore")
+    except urllib.error.URLError as e:
+        if isinstance(e, urllib.error.HTTPError):
+            print(f"HTTP Error {e.code} for {url}: {e.reason}")
+        else:
+            print(f"URLError for {url}: {e.reason}")
+        raise
+    except Exception as e:
+        print(f"Generic Error downloading {url}: {e}")
+        raise
 
 
 def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
@@ -87,7 +106,11 @@ def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
     for script in soup.find_all("script", type="application/ld+json"):
         try:
             data = json.loads(script.string)
-            if isinstance(data, dict) and data.get("@type") in {"Product", "product"}:
+            if isinstance(data, list):
+                for item in data:
+                    if isinstance(item, dict) and item.get("@type") in {"Product", "product"}:
+                        frags.append(json.dumps(item))
+            elif isinstance(data, dict) and data.get("@type") in {"Product", "product"}:
                 frags.append(json.dumps(data))
         except (TypeError, ValueError):
             continue
@@ -116,22 +139,19 @@ def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
 
     # 6. More specific selectors for Product Specifications (lists, definition lists, tables)
     spec_containers = soup.select(
-        ".product-description-container, .product-specifications, .spec-table, .product-details-table, #product-details, .tech-specs"
+        ".product-description-container, .product-specifications, .spec-table, .product-details-table, #product-details, .tech-specs, .features"
     )
     for container in spec_containers:
-        # Look for list items
         for li in container.find_all("li"):
             text = li.get_text(strip=True)
             if text and ":" in text and len(text) > 5:
                 frags.append(f"Spec_Candidate: {text}")
         
-        # Look for definition lists
         for dt_dd in container.find_all(["dt", "dd"]):
             text = dt_dd.get_text(strip=True)
             if text and len(text) > 5:
                 frags.append(f"Spec_Candidate: {text}")
 
-        # Look for table data (header + data cells)
         for table in container.find_all("table"):
             for row in table.find_all("tr"):
                 header_cells = [th.get_text(strip=True) for th in row.find_all("th")]
@@ -143,6 +163,11 @@ def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
                 elif data_cells:
                     frags.append(f"Table_Data_Candidate: {'; '.join(data_cells)}")
 
+    # 7. General paragraph text from common content areas
+    for p_tag in soup.select("div.content, article.product-content, section.product-details, main p"):
+        text = p_tag.get_text(strip=True)
+        if text and len(text) > 100:
+            frags.append(f"Paragraph_Content: {text}")
 
     frags = list(dict.fromkeys(frags))
 
@@ -152,7 +177,7 @@ def _scrape_candidate_fragments(soup: BeautifulSoup) -> List[str]:
 # Gemini‑powered extraction
 # ---------------------------------------------------------------------------
 @app.function(secrets=[modal.Secret.from_name("my-api-key-secret")])
-def _llm_extract_product(text: str, *, temperature: float = 0.0) -> Dict[str, Any]:
+def _llm_extract_product(text: str, *, temperature: float = 0.0, material_context: Optional[str] = None) -> Dict[str, Any]:
     """Use **Gemini** to turn raw *text* into structured product JSON."""
     gemini_api_key = os.environ.get("GEMINI_API_KEY")
     if not gemini_api_key:
@@ -163,12 +188,11 @@ def _llm_extract_product(text: str, *, temperature: float = 0.0) -> Dict[str, An
     model_name = os.getenv("GEMINI_MODEL", "models/gemini-1.5-flash-latest")
     model = genai.GenerativeModel(model_name)
 
-    # UPDATED PROMPT: Product-agnostic, but contextual for specifications
     sys_msg = (
         "You are a world-class extraction engine. Given arbitrary text about a product, "
         "return a JSON object with keys: name, brand (nullable), price (float or null), "
         "currency (ISO‑4217 or null), description (nullable), image_url (nullable), "
-        "and **specifications (dictionary of key-value pairs or null)**. "
+        "**specifications (dictionary of key-value pairs or null)**. "
         "Return only JSON—no code fences. "
         "Be as exhaustive as possible for the **description**, "
         "extract accurate numerical **price** and **ISO-4217 currency code** if available. "
@@ -179,6 +203,15 @@ def _llm_extract_product(text: str, *, temperature: float = 0.0) -> Dict[str, An
         "using a concise specification name (e.g., 'Color', 'Processor', 'Material', 'Capacity') as the key and its value as the string value. "
         "Example for a hypothetical product: {'Color': 'Black', 'Processor': 'XYZ-Chip', 'Storage': '256GB'}. "
     )
+
+    if material_context:
+        sys_msg += (
+            f"Additionally, provide a 'match_score' (float between 0 and 1) indicating "
+            f"how well the product's extracted specifications and overall context "
+            f"match the user-defined material context: '{material_context}'. "
+            f"A score of 1.0 means a perfect match, 0.0 means no match."
+        )
+
     user_msg = "Extract product information from the following text:\n" + text
 
     full_prompt = f"{sys_msg}\n\n{user_msg}"
@@ -206,105 +239,117 @@ def _llm_extract_product(text: str, *, temperature: float = 0.0) -> Dict[str, An
 # ---------------------------------------------------------------------------
 
 @app.function(timeout=120)
-def get_product_info(url: str) -> Dict[str, Any]:
+def get_product_info(url: str, material_context: Optional[str] = None) -> Dict[str, Any]:
     """End‑to‑end pipeline: download → scrape fragments → Gemini → JSON."""
     try:
         html = _download(url)
         soup = BeautifulSoup(html, "html.parser")
         fragments = _scrape_candidate_fragments(soup)
         concatenated = "\n".join(fragments)[:8000]
-        info = _llm_extract_product.remote(concatenated)
+        if not concatenated.strip():
+            return {"error": "No relevant text scraped for LLM.", "source_url": url}
+
+        # Pass material_context to _llm_extract_product
+        info = _llm_extract_product.remote(concatenated, material_context=material_context)
         info["source_url"] = url
+
+        # Price validation and flagging
+        extracted_price = info.get("price")
+        if extracted_price is None or (isinstance(extracted_price, (float, int)) and extracted_price == 0.0):
+            info["error_price_missing"] = "No valid price extracted (price is None or 0.0)."
+        
         return info
     except Exception as exc:
+        # Catch and report network/downloading errors
         print(f"Error in get_product_info for {url}: {exc}")
+        # Return a dictionary indicating the error, which main can then filter
         return {"error": str(exc), "source_url": url}
 
 # ---------------------------------------------------------------------------
-# Local entrypoint – processes all URLs and formats as a simpler table
+# Local entrypoint – processes all URLs and outputs to JSON file
 # ---------------------------------------------------------------------------
 
 @app.local_entrypoint()
-def main():
-    """Invoked by: `modal run get_started.py` (no --url needed now)"""
-    all_results: List[Dict[str, Any]] = []
+def main(
+    json_file_path: str = "urls.json",
+    output_file_name: str = "product_data.json",
+    material_context: str = "",
+):
+    """
+    Invoked by: `modal run your_script_name.py [--json-file-path urls.json] [--output-file-name product_data.json] [--material-context "Sapphire Wafer"]`
+    
+    Processes URLs from a JSON file, extracts product info, and saves to a JSON output file.
+    """
+    
+    global_material_context = material_context
+    if global_material_context:
+        print(f"Processing with material context: '{global_material_context}'")
 
-    for vendor, urls in url_dict.items():
+    loaded_url_data = load_urls_from_json(json_file_path)
+    if not loaded_url_data:
+        print("No URLs loaded. Exiting.")
+        return
+
+    final_output_data: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+    for vendor_name, urls in loaded_url_data.items():
+        # Initialize vendor entry if it doesn't exist
+        vendor_products: Dict[str, Dict[str, Any]] = {} 
+
         for url in urls:
-            print(f"Fetching {url} for {vendor}...")
-            data = get_product_info.remote(url)
-            all_results.append(data)
+            print(f"Fetching {url} for {vendor_name}...")
+            # Pass global_material_context to get_product_info.remote()
+            extracted_data = get_product_info.remote(url, material_context=global_material_context)
 
-    print("\n--- All Product Information ---")
-    
-    headers = ["Vendor", "Name", "Brand", "Price", "Currency", "Image URL", "Source URL", "Error"]
-    
-    # Define column widths for simple alignment (adjust as needed)
-    col_widths = {
-        "Vendor": 15,
-        "Name": 30,
-        "Brand": 15,
-        "Price": 10,
-        "Currency": 10,
-        "Image URL": 20,
-        "Source URL": 40,
-        "Error": 20,
-    }
-
-    # Print header
-    header_line = "| " + " | ".join([h.ljust(col_widths.get(h, 10)) for h in headers]) + " |"
-    print(header_line)
-    print("-" * len(header_line))
-
-    # Print data rows
-    for item in all_results:
-        vendor_name = "N/A"
-        for v, u_list in url_dict.items():
-            if item.get("source_url") in u_list:
-                vendor_name = v
-                break
-
-        row_values = [
-            vendor_name,
-            item.get("name", "N/A"),
-            item.get("brand", "N/A"),
-            item.get("price", "N/A"),
-            item.get("currency", "N/A"),
-            item.get("image_url", "N/A"),
-            item.get("source_url", "N/A"),
-            item.get("error", "N/A"),
-        ]
-        
-        formatted_row = []
-        for i, val in enumerate(row_values):
-            header_name = headers[i]
-            s_val = str(val)
-            max_width = col_widths.get(header_name, 10)
-
-            if header_name == "Description" or header_name == "Specifications": 
-                display_val = "<See Full Details Below>" 
-            elif len(s_val) > max_width:
-                display_val = s_val[:max_width - 3] + "..."
-            else:
-                display_val = s_val
+            # --- NEW LOGIC: Filter out HTTP errors and price-missing errors ---
+            if "error" in extracted_data and "HTTP Error" in extracted_data["error"]:
+                print(f"Skipping {url} for '{vendor_name}' due to HTTP error: {extracted_data['error']}")
+                continue # Skip this URL
             
-            formatted_row.append(display_val.ljust(max_width))
+            if "error_price_missing" in extracted_data:
+                print(f"Skipping {url} for '{vendor_name}' due to missing or invalid price: {extracted_data['error_price_missing']}")
+                continue # Skip this URL
+            # --- End NEW LOGIC ---
 
-        print("| " + " | ".join(formatted_row) + " |")
+            # Prepare the product data for output, skipping nulls
+            product_entry: Dict[str, Any] = {}
+            
+            # Standard fields (only add if not None, not empty string, and not empty list/dict)
+            for key in ["name", "brand", "price", "currency", "description", "image_url", "source_url", "match_score"]: # Added match_score here
+                value = extracted_data.get(key)
+                # Check for None, empty string, empty list, or empty dict
+                if value is not None and value != "" and (not isinstance(value, (list, dict)) or value):
+                    product_entry[key] = value
+            
+            # Flatten specifications directly into the product entry, only if meaningful
+            specifications = extracted_data.get("specifications")
+            if isinstance(specifications, dict) and specifications:
+                for spec_key, spec_value in specifications.items():
+                    if spec_value is not None and spec_value != "":
+                        product_entry[spec_key] = spec_value
+            elif specifications is not None:
+                product_entry["specifications_raw"] = specifications
 
-    print("\n--- Full Descriptions (if available) ---")
-    for item in all_results:
-        if item.get("description"):
-            print(f"URL: {item['source_url']}\nDescription: {item['description']}\n---\n")
+            # Include LLM-specific errors, but not general HTTP or price errors, as we're filtering those
+            if "llm_raw_error" in extracted_data:
+                product_entry["llm_raw_error"] = extracted_data["llm_raw_error"]
+            if "llm_raw_content" in extracted_data:
+                product_entry["llm_raw_content"] = extracted_data["llm_raw_content"]
 
-    print("\n--- Product Specifications (if available) ---")
-    for item in all_results:
-        specs = item.get("specifications")
-        if specs:
-            print(f"URL: {item['source_url']}\nSpecifications:")
-            if isinstance(specs, dict):
-                for key, value in specs.items():
-                    print(f"  - {key}: {value}")
-            else:
-                print(f"  {specs}")
-            print("---\n")
+            # Only add the product entry if it contains any extracted data beyond just source_url and potential LLM errors
+            # A product is considered valid if it has at least 'source_url' and one other meaningful field, OR if it has meaningful fields.
+            if len(product_entry) > 1 or (len(product_entry) == 1 and "source_url" in product_entry and (product_entry.get("name") or product_entry.get("brand") or product_entry.get("price") or product_entry.get("currency") or product_entry.get("description") or product_entry.get("image_url") or product_entry.get("specifications_raw") or product_entry.get("llm_raw_error") or product_entry.get("match_score"))):
+                vendor_products[url] = product_entry
+        
+        # Only add vendor to final_output_data if it has collected any valid products
+        if vendor_products:
+            final_output_data[vendor_name] = vendor_products
+    
+    # Write the collected data to a JSON file
+    try:
+        with open(output_file_name, 'w', encoding='utf-8') as f:
+            json.dump(final_output_data, f, ensure_ascii=False, indent=2)
+        print(f"\nSuccessfully extracted data and saved to '{output_file_name}'")
+    except Exception as e:
+        print(f"\nError saving data to JSON file: {e}")
+

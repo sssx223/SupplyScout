@@ -1,0 +1,381 @@
+{
+  "total_vendors": 94,
+  "vendors": [
+    {
+      "vendor_name": "\u65bd\u8010\u5fb7\u7535\u6c14 (schneider electric)",
+      "product_page_url": "https://www.schneider-electric.cn/zh/product/BCH2MM2023CA6C/bch%E4%BC%BA%E6%9C%8D%E7%94%B5%E6%9C%8D-130mm-2000w-%E5%B8%A6%E6%B2%B9%E5%B0%81-%E5%B8%A6%E9%94%AE-%E5%86%9B%E8%A7%84%E6%8F%92%E5%A4%B4/"
+    },
+    {
+      "vendor_name": "nxp semiconductors",
+      "product_page_url": "https://www.nxp.jp/products/MC34932"
+    },
+    {
+      "vendor_name": "nordic a/s",
+      "product_page_url": "https://nordic.nu/en/vare/siemens-simotics-s-servo-motor-1ft7084-5af71-1fb0/"
+    },
+    {
+      "vendor_name": "schneider electric",
+      "product_page_url": "https://www.traceparts.com/els/kompas/zh/product/schneider-electric-servo-motor-bmi-100mm-2-stages-13-phase-keyed-shaft-without-holding-brake?CatalogPath=SCHNEIDER_ELECTRIC%3AF_TELEMECANIQUE.07.090.010.060&Product=90-04082022-058716"
+    },
+    {
+      "vendor_name": "lichuan\u00ae",
+      "product_page_url": "https://ja.lichuanservomotor.com/ethercat-ac-servo-motor-7500w-3000rpm-2-39nm-a-kit.html"
+    },
+    {
+      "vendor_name": "leadshine",
+      "product_page_url": "https://www.leadshine.com/product-detail/ELM1H-0750MA80F.html"
+    },
+    {
+      "vendor_name": "sigma surplus",
+      "product_page_url": "https://sigmasurplus.com/servo-motors/"
+    },
+    {
+      "vendor_name": "micro ohm",
+      "product_page_url": "https://microohm-eg.com/product/16-channel-12-bit-pwm-servo-driver-i2c-interface-pca9685-for-arduino-raspberry-pi/"
+    },
+    {
+      "vendor_name": "karsun access",
+      "product_page_url": "https://www.karsunaccess.cn/de/ks-dz0023/"
+    },
+    {
+      "vendor_name": "biven machinery sales",
+      "product_page_url": "https://bivenmachinerysales.co.uk/product/harvey-t-40-14%E2%80%B3-x-24%E2%80%B3-bench-top-lathe-with-servo-motor/"
+    },
+    {
+      "vendor_name": "maschinenteil24",
+      "product_page_url": "https://www.mt24.com/en/Electronics/Drive-technology/Engines/Servo-Motors/Servo-motor-oxid-15.html"
+    },
+    {
+      "vendor_name": "thorlabs",
+      "product_page_url": "https://www.thorlabs.de/thorproduct.cfm?partnumber=CR1-Z6E"
+    },
+    {
+      "vendor_name": "baum\u00fcller",
+      "product_page_url": "https://www.baumueller.com/en/products/motors/servo-motors"
+    },
+    {
+      "vendor_name": "sorotec gmbh",
+      "product_page_url": "https://www.sorotec.de/shop/Servo-Motor-400-Watt---48-Volt.html?language=de"
+    },
+    {
+      "vendor_name": "kss.,co.ltd.",
+      "product_page_url": "https://automationml.partcommunity.com/3d-cad-models/si-mobo-ground-ball-screws-si-servo-motor-kss-co-ltd?info=kss%2Fdir_motor_drive_bs%2Fstand_stock_ball_screws%2Fsi_mobo&languageIso=zh"
+    },
+    {
+      "vendor_name": "tamagawa seiki co., ltd.",
+      "product_page_url": "https://www.tamagawa-seiki.com/products/servomotor/"
+    },
+    {
+      "vendor_name": "sanmei",
+      "product_page_url": "http://www.sanmei.co.jp/"
+    },
+    {
+      "vendor_name": "\u5c3c\u5f97\u79d1\u4eea\u5668\u682a\u5f0f\u4f1a\u793e",
+      "product_page_url": "https://www.nidec.com/cn/nidec-instruments/product/servo-motor/"
+    },
+    {
+      "vendor_name": "gm automation",
+      "product_page_url": "https://www.ebay.co.uk/itm/325765280072"
+    },
+    {
+      "vendor_name": "motorcycle spare parts",
+      "product_page_url": "https://www.motorcyclespareparts.eu/de/yamaha-ersatzteile/2d1858200100"
+    },
+    {
+      "vendor_name": "moons'",
+      "product_page_url": "https://www.moons.com.cn/p/mbdv-series-dc-servo-motor/sm0601gsl-kcy-bnv-000004611170000946"
+    },
+    {
+      "vendor_name": "\u682a\u5f0f\u4f1a\u793e\u30cf\u30a4\u30c6\u30c3\u30af\u30de\u30eb\u30c1\u30d7\u30ec\u30c3\u30af\u30b9",
+      "product_page_url": "https://hitecrcd.co.jp/industrial/irrobot/product_premiuml96.html"
+    },
+    {
+      "vendor_name": "sebo shop",
+      "product_page_url": "https://seboshop.co.uk/sebo-spare-parts/sebo-x1-spares/sebo-x1-x4-x5-x7-servo-motor"
+    },
+    {
+      "vendor_name": "teknic",
+      "product_page_url": "https://teknic.com/products/clearpath-brushless-dc-servo-motors/"
+    },
+    {
+      "vendor_name": "comtherm ltd",
+      "product_page_url": "https://comtherm.co.uk/zh/collections/damper-motors-servos/products/econex-ag8a2002-s-servo-motor-24v?variant=43774237081854"
+    },
+    {
+      "vendor_name": "zkseasy",
+      "product_page_url": "https://www.micro-servomotor.com/servo-motor/micro-servo-motor/25mm-brushless-motor.html"
+    },
+    {
+      "vendor_name": "smc",
+      "product_page_url": "https://smc.partcommunity.com/3d-cad-models/11-lejs-ac-electric-actuators-high-rigidity-slider-type-ball-screw-drive-ac-servo-motor-clean-series-smc?info=smc%2Felectric_actuators%2Fslider_types%2Flej%2F11-lejs_ac_asmtab.prj&languageIso=zh"
+    },
+    {
+      "vendor_name": "industrial automation co.",
+      "product_page_url": "https://industrialautomationco.com/collections/servo-motors"
+    },
+    {
+      "vendor_name": "modellbahnshop-lippe.com",
+      "product_page_url": "https://www.modellbahnshop-lippe.com/Gleise+%26+Gleisbau/Weichen-Antriebe/Weinert-74300/de/modell_219876.html"
+    },
+    {
+      "vendor_name": "vivita market",
+      "product_page_url": "https://market.vivita.club/products/servo-small"
+    },
+    {
+      "vendor_name": "jinan bcamcnc machinery co., ltd",
+      "product_page_url": "https://zh.treatstock.com/product/1br2unccrvbai2-large-size-woodworking-cnc-router-2060-aluminum-servo-big-cnc-router-machine-with-6000x2000"
+    },
+    {
+      "vendor_name": "isel",
+      "product_page_url": "https://www.isel.com/en/ec-40-60-80-ac.html"
+    },
+    {
+      "vendor_name": "cnc spares",
+      "product_page_url": "https://www.cncspares.com/fanuc-parts/fanuc-motor/fanuc-servo-motor/"
+    },
+    {
+      "vendor_name": "gixxer-shop",
+      "product_page_url": "https://www.ebay.co.uk/itm/166305641494"
+    },
+    {
+      "vendor_name": "college sewing machine parts ltd",
+      "product_page_url": "https://www.college-sewing.co.uk/machinery/sewing-machine-servo-motors/jack-servo-motors.html"
+    },
+    {
+      "vendor_name": "ato",
+      "product_page_url": "https://www.servo.net/400w-ac-servo-motor.html"
+    },
+    {
+      "vendor_name": "longwin precision",
+      "product_page_url": "https://de.longwinprecision.com/cnc-machining-parts/aluminum-servo-motor-housing-case-shell.html"
+    },
+    {
+      "vendor_name": "rollforming-cn.com",
+      "product_page_url": "rollforming-cn.com"
+    },
+    {
+      "vendor_name": "demark",
+      "product_page_url": "https://www.demarkchina.cn/laser-machine-parts/laser-machine-body-parts/lead-motion-laser-cutting-machine-servo-drive.html"
+    },
+    {
+      "vendor_name": "nexperia",
+      "product_page_url": "https://www.nexperia.cn/product/NGW40T65M3DFP"
+    },
+    {
+      "vendor_name": "lanen",
+      "product_page_url": "https://de.lanenelectric.com/servo-motor-drive/mitsubishi-servo-motor/original-mitsubishi-servo-hg-kr73b-brake.html"
+    },
+    {
+      "vendor_name": "rocketronics",
+      "product_page_url": "https://www.rocketronics.de/shop/de/Servomotor-IHSV42-40-07-24.html"
+    },
+    {
+      "vendor_name": "delta ac drives",
+      "product_page_url": "https://deltaacdrives.com/delta-ecma-ga1309rs-ecma-a2-servo-motor/"
+    },
+    {
+      "vendor_name": "beijing knd cnc technique co., ltd.",
+      "product_page_url": "https://www.knd.com.cn/Spindle-Servo-Motor-pl65126767.html"
+    },
+    {
+      "vendor_name": "maxodeals",
+      "product_page_url": "https://www.maxodeals.com/de/sew-eurodrive-cfm71l-br-tf-rh1l-kk-ump"
+    },
+    {
+      "vendor_name": "modellsport.ch",
+      "product_page_url": "https://www.modellsport.ch/Hubschrauber/Helikopter-Elektro/JR/JR-Forza-450-mit-Servo-Motor-und-ESC.html"
+    },
+    {
+      "vendor_name": "desheng",
+      "product_page_url": "https://www.dspowerservo.com/super-lowest-price-arduino-micro-servo-motor-ds-s020b-c-20kg-waterproof-servo-desheng-2-product/"
+    },
+    {
+      "vendor_name": "econ technology",
+      "product_page_url": "https://de.hybridservos.com/easy-servo-motor-12nm-with-1000ppr-encoder"
+    },
+    {
+      "vendor_name": "econ-technik",
+      "product_page_url": "https://de.hybridservos.com/nema34-8-5nm-closed-loop-stepper-motor-with"
+    },
+    {
+      "vendor_name": "orbray co., ltd.",
+      "product_page_url": "https://orbray.com/en/product/dccorelessmotor/rcservo.html"
+    },
+    {
+      "vendor_name": "\u5343\u77f3\u96fb\u5546",
+      "product_page_url": "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6L6M"
+    },
+    {
+      "vendor_name": "act motor",
+      "product_page_url": "https://www.act-motor.com/de/17hs4417-nema17-stepper-motor/"
+    },
+    {
+      "vendor_name": "lego",
+      "product_page_url": "https://www.lego.com/en-gb/product/power-functions-servo-motor-88004"
+    },
+    {
+      "vendor_name": "makeblock",
+      "product_page_url": "https://www.makeblock.com.cn/en/project/meds15-servo-motor"
+    },
+    {
+      "vendor_name": "cnc-shopping intl.",
+      "product_page_url": "https://www.cnc-shopping.co.uk/indramat-c-27/servo-motors/indramat-servo-motor-c-323.html"
+    },
+    {
+      "vendor_name": "nidec instruments corporation",
+      "product_page_url": "https://www.nidec.com/en/nidec-instruments/product/servo-motor/"
+    },
+    {
+      "vendor_name": "rs",
+      "product_page_url": "https://uk.rs-online.com/web/c/automation-control-gear/electric-motors/servo-motors/"
+    },
+    {
+      "vendor_name": "gecko drive",
+      "product_page_url": "https://www.geckodrive.com/product/g320x-digital-servo-drive/"
+    },
+    {
+      "vendor_name": "weinert modellbau",
+      "product_page_url": "https://www.modellbahnshop-lippe.com/Railtracks/Turnout+Mechanism/Weinert-74300/gb/modell_219876.html"
+    },
+    {
+      "vendor_name": "mclennan",
+      "product_page_url": "https://www.mclennan.co.uk/product/mac800-d2-746w-integrated-servo-motor"
+    },
+    {
+      "vendor_name": "funduinoshop",
+      "product_page_url": "https://funduinoshop.com/en/electronic-modules/electric-motors-and-accessories/servo-motors/funduino-sg90-servo-motor-see-towerpro"
+    },
+    {
+      "vendor_name": "sparepartsstoreareus",
+      "product_page_url": "https://picclick.co.uk/Parker-Eme-HDX115A6-44S1-Servo-Motor-6000rpm-37Nm-Type21-B-256275962270.html"
+    },
+    {
+      "vendor_name": "dalian prodigy technologies co., ltd.",
+      "product_page_url": "https://www.prodigytech.cn/TECO-AC-Servo-Motor-Encoder-3KW-3000rpm-Teco-Servo-Drive-9-55N-M-JSMA-PMC30ABK-JSDAP-75A3-pd537434078.html"
+    },
+    {
+      "vendor_name": "global-elektronik",
+      "product_page_url": "https://www.ebay.co.uk/itm/256498652461"
+    },
+    {
+      "vendor_name": "enjoy smile co.",
+      "product_page_url": "https://products.enjoysmile.co.jp/mrd-zero-conversion-kit/"
+    },
+    {
+      "vendor_name": "smt xtra",
+      "product_page_url": "https://www.smtxtra.com/shop/smt-spare-parts-consumables/spares-panasonic/panasonic-motor-20w-part-number-n510042738aa/"
+    },
+    {
+      "vendor_name": "tanotec",
+      "product_page_url": "https://picclick.co.uk/Rexroth-MFE0017BOMA-For-Servo-Motor-Rexroth-Msm-Tamagawa-373106340543.html"
+    },
+    {
+      "vendor_name": "dongguan liyi environmental technology co., ltd",
+      "product_page_url": "https://www.liyi-tech.com/sale-10905624-100kn-universal-testing-machine-servo-motor-tensile-strength-machine-with-precision-0-5.html"
+    },
+    {
+      "vendor_name": "\u65bd\u8010\u5fb7\u7535\u6c14",
+      "product_page_url": "https://www.schneider-electric.cn/zh/product/BSH0402P16A2A/servo-motor-bsh-lexium-32-0-38n-m-9000rpm-40mm-keyed-shaft-16-sincos-single-turn-without-brake-ip50/"
+    },
+    {
+      "vendor_name": "texas instruments",
+      "product_page_url": "https://www.ti.com.cn/product/cn/DRV8837C"
+    },
+    {
+      "vendor_name": "m5stack",
+      "product_page_url": "https://docs.m5stack.com/en/module/module13.2_gopl"
+    },
+    {
+      "vendor_name": "sorotec",
+      "product_page_url": "https://www.sorotec.de/shop/CNC-Controls/servo-systems/jmc-servos/"
+    },
+    {
+      "vendor_name": "oyostepper.com",
+      "product_page_url": "https://www.oyostepper.com/category-141-b0-Stepper-Servo-Motor.html"
+    },
+    {
+      "vendor_name": "\u745c\u6b23\u5e73\u745e",
+      "product_page_url": "https://www.cqyx.com.cn/yeaphi-servo-motor-with-drive-1kw1-2kw-48v-72v-3600-3800rpm-driving-train-including-driving-motor-gearbox-and-brake-for-zero-turn-mower-and-lv-tractor-product/"
+    },
+    {
+      "vendor_name": "nuelectronics co.,ltd",
+      "product_page_url": "http://www.nuelectronics.com/product/Driverofservomotor16/"
+    },
+    {
+      "vendor_name": "iai",
+      "product_page_url": "https://automationml.partcommunity.com/3d-cad-models/rcs2-rtc10l-iai?info=iai%2Fcylinder_robot%2Frotary_type%2Frcs2%2Flarge_diameter_hollw_tape%2Fmedium_type%2Frcs2_rtc10l_asmtab.prj&languageIso=zh"
+    },
+    {
+      "vendor_name": "addf1",
+      "product_page_url": "https://www.ebay.co.uk/itm/235570513308"
+    },
+    {
+      "vendor_name": "applied motion products inc.",
+      "product_page_url": "www.applied-motion.com/SV"
+    },
+    {
+      "vendor_name": "nxp",
+      "product_page_url": "https://www.nxp.com/part/MC34931EK?lang=en"
+    },
+    {
+      "vendor_name": "lgn life",
+      "product_page_url": "https://lgn-life.translate.goog/\u300ediy\u300f\u4f4e\u6210\u672c\u65e0\u5237\u9a71\u7535\u4e00\u4f53\u4f3a\u670d\u7535\u673a/?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp&_x_tr_sch=http"
+    },
+    {
+      "vendor_name": "actronic-solutions",
+      "product_page_url": "https://www.actronic-solutions.de/servomotoren.html"
+    },
+    {
+      "vendor_name": "active-robots",
+      "product_page_url": "https://www.active-robots.com/high-torque-dc-servo-motor-900rpm-with-uart-12c-ppm-drive.html"
+    },
+    {
+      "vendor_name": "klemmshop.de",
+      "product_page_url": "https://www.klemmshop.de/CaDA-JV5029-Klemmbaustein-Pro-Servo-Motor-Lenkmotor"
+    },
+    {
+      "vendor_name": "industrypart gmbh",
+      "product_page_url": "https://www.industrypart.com/de/products/yaskawa-usarem-03ce2k-ac-servo-motor-23074.html"
+    },
+    {
+      "vendor_name": "bida-industry.de",
+      "product_page_url": "https://www.bida-industry.de/Allen-Bradley-MPL-B1530U-VJ74AA-Servomotor-Brushless-Servo-Motor"
+    },
+    {
+      "vendor_name": "renesas electronics corporation",
+      "product_page_url": "https://www.renesas.com/products/microcontrollers-microprocessors/rx/rx700/rx72t.html"
+    },
+    {
+      "vendor_name": "misini",
+      "product_page_url": "https://www.amazon.co.uk/MISINI-Supercar-Building-Controlled-Clamping/dp/B0B3MVFQF3"
+    },
+    {
+      "vendor_name": "wantai",
+      "product_page_url": "http://de.wantmotor.com/dc-motor/universal-dc-motor/hc8155-series-universal-dc-motor.html"
+    },
+    {
+      "vendor_name": "amkmotion gmbh + co kg",
+      "product_page_url": "https://www.amk-motion.com/en/product-portfolio/decentralized-drive-solutions/synchronous-servo-motor-with-integrated-inverter-idt/"
+    },
+    {
+      "vendor_name": "harmonic drive systems inc.",
+      "product_page_url": "https://www.hds.co.jp/english/products/detail.html?pdid=05mo02_hma"
+    },
+    {
+      "vendor_name": "n\u00e4hmaschinen binder",
+      "product_page_url": "https://shop.naehbinder.at/de-at/online-shop/n%C3%A4hmaschinenzubeh%C3%B6r/n%C3%A4hmaschinenmotore/ac-servo-motor-750s/"
+    },
+    {
+      "vendor_name": "shenzhen yhg heating science & technology co., ltd",
+      "product_page_url": "https://yhg688.en.made-in-china.com/product/AxPYsrCyXNWp/China-Factory-Price-Honeywell-Original-Servo-Motor-M7284q1009-Damper-Actuator-for-Industrial-Combustion.html"
+    },
+    {
+      "vendor_name": "piko",
+      "product_page_url": "https://www.piko-shop.de/en/artikel/g-pantograph-servo-motor-28146.html"
+    },
+    {
+      "vendor_name": "elephant robotics",
+      "product_page_url": "https://www.elephantrobotics.com/en/myarm-c650/"
+    }
+  ]
+}
